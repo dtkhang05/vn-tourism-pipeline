@@ -9,6 +9,7 @@ import pydeck as pdk
 import streamlit as st
 from queries import QUERIES
 from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
 
 TOP_N = 5  # số điểm trong phần áp phích
 LIST_N = 15  # số dòng của danh sách rút gọn trước khi bấm "xem thêm"
@@ -230,8 +231,8 @@ def poster(r: dict, p: dict) -> str:
     """Thẻ top 5, tỉ lệ 16:9: hạng và tên ở góc trên trái, tỉnh ở góc dưới trái, miền, quốc tế và so với cùng kỳ ở góc dưới phải; bốn tín hiệu trong khung kính nhỏ phía trên."""
     cls, img = photo(r["place_id"], r["region"])
     return (
-        f'<article class="pc"><div class="ph {cls}">{img}<span class="rk">{int(r[p["rank"]])}</span><b class="nm">{esc(r["name"])}</b>'
-        f'<span class="pt">{num(r[p["score"]])}<small>điểm</small></span><span class="pv">{esc(r["province"])}</span>{credit_short(r["place_id"])}'
+        f'<article class="pc"><div class="ph {cls}">{img}<span class="rk">{int(r[p["rank"]]) if pd.notna(r[p["rank"]]) else "–"}</span><b class="nm">{esc(r["name"])}</b>'
+        f'<span class="pt">{num(r[p["score"]]) if pd.notna(r[p["score"]]) else "–"}<small>điểm</small></span><span class="pv">{esc(r["province"])}</span>{credit_short(r["place_id"])}'
         f'<div class="r">{region_chip(r["region"])}{intl_chip(r, p)}<span class="tr-wrap">{trend_html(r[p["yoy"]])}</span></div></div>'
         f'<div class="bd">{signal_rows(r, p)}{flag_html(r)}</div></article>'
     )
@@ -486,6 +487,44 @@ else:
     )
     st.altair_chart(chart, width="stretch")
     st.caption("Mỗi cột là vị trí của điểm so với các điểm còn lại ở tín hiệu đó (0 đến 100, càng cao càng nổi bật). Điểm hot là trung bình bốn cột.")
+
+# ------------------------------------------------------------------ chi tiết một điểm
+st.markdown('<h2 class="sec">Xem chi tiết một điểm</h2>', unsafe_allow_html=True)
+detail_id = st.selectbox(
+    "Chọn điểm", options=sorted(cmp_label, key=lambda k: cmp_label[k]), index=sorted(cmp_label, key=lambda k: cmp_label[k]).index(cmp_default[0]),
+    format_func=cmp_label.get, key="detail",
+)
+d_row = places.set_index("place_id").loc[detail_id].to_dict() | {"place_id": detail_id}
+st.markdown(f'<div class="podium">{poster(d_row, p)}</div>', unsafe_allow_html=True)
+if pd.isna(d_row[p["rank"]]):
+    st.caption(f"Điểm này chưa được xếp hạng {p['label']} vì lượng quan tâm thuộc nhóm thấp nhất hoặc thiếu tín hiệu, nên các thanh bên trên có thể để trống.")
+try:
+    daily = query(QUERIES["daily"], "daily")
+except (SQLAlchemyError, OSError):
+    daily = pd.DataFrame()
+dd = daily[daily["place_id"] == detail_id].copy() if not daily.empty else daily
+if dd.empty or dd["wiki_views"].notna().sum() < 14:
+    st.caption("Chưa có đủ số liệu theo ngày để vẽ biểu đồ cho điểm này.")
+else:
+    dd["date"] = pd.to_datetime(dd["date"])
+    dd = dd.sort_values("date")
+    smooth = dd.set_index("date")[["wiki_views", "wiki_views_ly"]].rolling(7, min_periods=4).mean().reset_index()
+    smooth = smooth.rename(columns={"wiki_views": "Năm nay", "wiki_views_ly": "Cùng kỳ năm trước"})
+    long = smooth.melt(id_vars="date", var_name="Giai đoạn", value_name="Lượt xem/ngày").dropna()
+    line = (
+        alt.Chart(long)
+        .mark_line(strokeWidth=2.5)
+        .encode(
+            x=alt.X("date:T", title=None, axis=alt.Axis(format="%d/%m", tickCount=6, labelOverlap=True)),
+            y=alt.Y("Lượt xem/ngày:Q", scale=alt.Scale(zero=False)),
+            color=alt.Color("Giai đoạn:N", scale=alt.Scale(domain=["Năm nay", "Cùng kỳ năm trước"], range=["#6EA8FF", "#B79BFF"]), legend=alt.Legend(orient="top", title=None)),
+            strokeDash=alt.StrokeDash("Giai đoạn:N", scale=alt.Scale(domain=["Năm nay", "Cùng kỳ năm trước"], range=[[1, 0], [6, 4]]), legend=None),
+            tooltip=[alt.Tooltip("date:T", title="Ngày", format="%d/%m/%Y"), "Giai đoạn", alt.Tooltip("Lượt xem/ngày:Q", format=".0f")],
+        )
+        .properties(height=280)
+    )
+    st.altair_chart(line, width="stretch")
+    st.caption("Lượt xem Wikipedia mỗi ngày ở mọi ngôn ngữ, trung bình trượt 7 ngày, trong 90 ngày gần nhất so với cùng giai đoạn năm trước (lùi đúng 52 tuần).")
 
 st.markdown(f'<h2 class="sec">Trên bản đồ, theo {p["label"]}</h2>', unsafe_allow_html=True)
 map_df = places.assign(score=places[p["score"]].round(1), radius=places[p["score"]].fillna(0).mul(350).add(8000), color=places["region"].map(REGION_RGB))
