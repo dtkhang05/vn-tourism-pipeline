@@ -2,7 +2,7 @@ import json
 
 import yaml
 
-from tourism.config import CONFIG_DIR, load_places
+from tourism.config import CONFIG_DIR, load_places, load_provinces
 
 ALLOWED_PLACE_KEYS = {"id", "name", "province", "lat", "lon", "wiki_title", "trends_keyword", "aliases", "image_title", "commons_category", "extra_wiki_titles"}
 
@@ -24,3 +24,13 @@ def test_place_images_are_attributed_and_match_known_places():
         assert img["url"].lower().endswith((".jpg", ".jpeg")), f"{pid}: không phải ảnh JPEG"
         assert img["license"], f"{pid}: thiếu giấy phép, không được dùng khi chưa ghi nguồn"
         assert img["artist"], f"{pid}: thiếu tên tác giả"
+
+
+def test_province_images_are_attributed_and_match_known_provinces():
+    images = json.loads((CONFIG_DIR / "province_images.json").read_text(encoding="utf-8"))
+    provinces = {p.name for p in load_provinces()}
+    assert set(images) <= provinces, f"ảnh của tỉnh không tồn tại: {set(images) - provinces}"
+    for name, img in images.items():
+        assert img["url"].startswith(("https://upload.wikimedia.org/", "https://thumb.wikimedia.org/")), name
+        assert img["url"].lower().endswith((".jpg", ".jpeg")), f"{name}: không phải ảnh JPEG"
+        assert img["license"] and img["artist"], f"{name}: thiếu giấy phép hoặc tác giả"

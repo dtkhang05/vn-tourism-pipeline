@@ -72,12 +72,22 @@ def _read_images(path: str, mtime: float) -> dict[str, dict]:
     return json.loads(Path(path).read_text(encoding="utf-8"))  # mtime nằm trong khóa bộ nhớ đệm để đổi file là đọc lại
 
 
-def load_images() -> dict[str, dict]:
-    """Ảnh đại diện từ Wikimedia Commons (scripts/fetch_place_images.py). Thiếu file thì dùng khung màu."""
-    for p in (Path(__file__).parent / "place_images.json", Path(__file__).resolve().parents[1] / "config" / "place_images.json"):
+def _find_json(name: str) -> Path | None:
+    for p in (Path(__file__).parent / name, Path(__file__).resolve().parents[1] / "config" / name):
         if p.exists():
-            return _read_images(str(p), p.stat().st_mtime)
-    return {}
+            return p
+    return None
+
+
+def load_images() -> dict[str, dict]:
+    """Ảnh đại diện từ Wikimedia Commons (scripts/fetch_place_images.py và config/province_images.json). Thiếu file thì dùng khung màu.
+    Ảnh riêng của tỉnh có khóa "prov:<tên tỉnh>"; dùng cho tỉnh chỉ có một điểm, để thẻ tỉnh không lặp ảnh thẻ điểm."""
+    out: dict[str, dict] = {}
+    for name, prefix in (("place_images.json", ""), ("province_images.json", "prov:")):
+        p = _find_json(name)
+        if p:
+            out.update({prefix + k: v for k, v in _read_images(str(p), p.stat().st_mtime).items()})
+    return out
 
 
 IMAGES = load_images()
@@ -116,8 +126,10 @@ PROVINCE_PHOTO: dict[str, str] = {}  # tỉnh -> mã điểm có ảnh dùng cho
 
 
 def province_photo_id(province: str, top_id: str) -> str:
-    """Thẻ tỉnh dùng ảnh khác với thẻ điểm nổi nhất của tỉnh đó, nên ảnh điểm đứng đầu không bị lặp ở hai tab."""
-    return PROVINCE_PHOTO.get(province, top_id)
+    """Thẻ tỉnh dùng ảnh khác với thẻ điểm nổi nhất của tỉnh đó: ảnh điểm thứ hai của tỉnh, hoặc ảnh riêng của tỉnh nếu tỉnh chỉ có một điểm."""
+    if province in PROVINCE_PHOTO:
+        return PROVINCE_PHOTO[province]
+    return f"prov:{province}" if f"prov:{province}" in IMAGES else top_id
 
 
 def photo(place_id: str, region: str) -> tuple[str, str]:
@@ -473,11 +485,14 @@ with st.expander("Nguồn ảnh"):
         who = i.get("artist") or ""
         who = "Wikimedia Commons" if "//" in who or who.startswith("[") or not who else who
         return (
-            f"<td>{esc(names.get(pid, pid))}</td>"
+            f"<td>{esc(label(pid))}</td>"
             f'<td>{esc(who[:60])}, {esc(i.get("license", ""))}, <a href="{esc(i["page"])}" target="_blank" rel="noopener">Trang ảnh</a></td>'
         )
 
-    items = sorted(IMAGES.items(), key=lambda kv: names.get(kv[0], kv[0]))
+    def label(pid: str) -> str:
+        return pid.removeprefix("prov:") + " (tỉnh)" if pid.startswith("prov:") else names.get(pid, pid)
+
+    items = sorted(IMAGES.items(), key=lambda kv: label(kv[0]))
     rows = ""
     for k in range(0, len(items), 2):
         pair = items[k : k + 2]
