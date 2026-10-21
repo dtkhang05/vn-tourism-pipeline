@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import pydeck as pdk
 import streamlit as st
+from queries import QUERIES
 from sqlalchemy import create_engine
 
 TOP_N = 5  # số điểm trong phần áp phích
@@ -62,9 +63,21 @@ def engine():
     return create_engine(url)
 
 
+SNAPSHOT_DIR = Path(__file__).parent / "snapshot"
+
+
 @st.cache_data(ttl=300)
-def query(sql: str, **params) -> pd.DataFrame:
-    return pd.read_sql(sql, engine(), params=params or None)
+def query(sql: str, name: str) -> pd.DataFrame:
+    """Đọc từ Postgres; nếu không kết nối được (bản đưa lên web không có CSDL) thì đọc ảnh chụp dữ liệu app/snapshot/<name>.parquet
+    do scripts/export_snapshot.py tạo. Đặt DASHBOARD_SNAPSHOT=1 để luôn dùng ảnh chụp."""
+    snap = SNAPSHOT_DIR / f"{name}.parquet"
+    if os.getenv("DASHBOARD_SNAPSHOT") != "1":
+        try:
+            return pd.read_sql(sql, engine())
+        except Exception:
+            if not snap.exists():
+                raise
+    return pd.read_parquet(snap)
 
 
 @st.cache_data
@@ -273,12 +286,9 @@ def province_row(r: dict, q: dict) -> str:
 
 
 # ------------------------------------------------------------------ dữ liệu
-places = query("select * from marts.mart_hot_places_latest")
-provinces = query("select * from marts.mart_hot_provinces_latest")
-weather = query(
-    "select place_id, avg(temp_max_c) as temp, sum(precip_mm) as rain from raw.weather_daily "
-    "where date between current_date and current_date + 2 group by 1"
-)
+places = query(QUERIES["places"], "places")
+provinces = query(QUERIES["provinces"], "provinces")
+weather = query(QUERIES["weather"], "weather")
 WX = {r["place_id"]: {"temp": float(r["temp"]), "rain": float(r["rain"])} for r in weather.to_dict("records") if pd.notna(r["temp"])}
 
 if not places["has_signal"].any():
@@ -481,10 +491,7 @@ with st.expander("Xem số liệu gốc của từng điểm"):
         "Cùng kỳ năm trước/ngày": st.column_config.NumberColumn(format="%.0f"), "Số bài báo giai đoạn trước": st.column_config.NumberColumn(format="%.1f"),
     })
 with st.expander("Dữ liệu cập nhật khi nào?"):
-    fresh = query(
-        "select distinct on (source) source as \"Nguồn\", finished_at as \"Lần chạy gần nhất\", status as \"Trạng thái\", rows_written as \"Số dòng\" "
-        "from raw.ingest_runs order by source, finished_at desc"
-    )
+    fresh = query(QUERIES["ingest_runs"], "ingest_runs")
     st.dataframe(fresh, hide_index=True, width="stretch")
     st.caption("Trạng thái empty nghĩa là nguồn trả về 0 dòng (ví dụ Google Trends bị chặn), không phải lỗi của hệ thống.")
 with st.expander("Nguồn ảnh"):

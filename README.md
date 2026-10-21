@@ -136,3 +136,13 @@ Giữ chú thích trong `dbt_project.yml` bằng ASCII: dbt đọc file này the
 - **Đã kiểm chứng:** pytest (15 test), ruff, ingest dữ liệu thật vào Postgres (Docker), `dbt build` (30 mục pass), dashboard trên trình duyệt (khổ rộng, cả hai chế độ tuần và tháng, và khổ điện thoại 375 px không tràn ngang ở lần kiểm tra trước khi đổi sang thẻ ảnh tràn viền).
 - **Đã kiểm chứng:** DAG `tourism_hot_places` chạy end-to-end trong Airflow (10/10 task thành công, kể cả `ingest_news_volume` và `dbt_test`). Lần chạy đầu lộ ra ba lỗi mà test cục bộ không thấy: hàm ingest nhận cả ngữ cảnh Airflow, thư mục dbt gắn từ máy chủ không ghi được log, và ngày mới nhất của Wikipedia mới có số liệu cho vài điểm nên làm mốc xếp hạng bị lệch (nay chỉ lấy ngày đã phủ từ 90% số điểm).
 - **Chưa kiểm chứng:** image dashboard chưa build.
+
+## Đưa dashboard lên web
+
+Dashboard đọc Postgres khi chạy cục bộ. Bản đưa lên web không có CSDL nên đọc ảnh chụp dữ liệu trong `app/snapshot/`
+(tự dùng khi không kết nối được Postgres, hoặc đặt `DASHBOARD_SNAPSHOT=1`).
+
+1. Cập nhật dữ liệu: chạy pipeline và dbt, rồi `python scripts/export_snapshot.py`, commit thư mục `app/snapshot/` và push.
+2. Vào https://share.streamlit.io, đăng nhập bằng GitHub, chọn **Create app**: repository `dtkhang05/vn-tourism-pipeline`,
+   branch `main`, file chính `app/dashboard.py`. Mỗi lần push, Streamlit Cloud tự nạp lại trang.
+3. Dependencies lấy từ `app/requirements.txt`.
