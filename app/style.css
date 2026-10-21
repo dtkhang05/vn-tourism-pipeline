@@ -306,3 +306,19 @@ table.credits-tb a { color: #6FD6F2; }
   .pc .flag { display: block; }
 }
 .pc .flag { margin-top: .45rem; font-size: .6rem; padding: .08rem .45rem; }
+
+/* ================= HIỆU NĂNG ================= */
+.bgshow i { background-image: var(--u); }
+.ph { overflow: hidden; }
+.ph .im { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.gc, .pc { content-visibility: auto; contain-intrinsic-size: auto 56vw; }
+
+/* Điện thoại: bỏ hiệu ứng tốn GPU (làm mờ nền sau kính, nền trượt phóng to, bóng đổ), dùng ảnh nhỏ hơn. */
+@media (max-width: 800px) {
+  .bgshow i { background-image: var(--s); inset: 0; animation: none; display: none; }
+  .bgshow i:first-child { display: block; opacity: 1; transform: none; }
+  .stApp * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  .pc .bd, .picks .pick .tx, .gc .bd, .gc .wx, .howto, .glass, .note { background: rgba(8,22,50,.82); box-shadow: none; }
+  .gc, .picks .pick { box-shadow: none; }
+  .hero .facts span, .gc .rk, .gc .pt, .pc .rk, .pc .pt { background: rgba(9,24,54,.85); }
+}

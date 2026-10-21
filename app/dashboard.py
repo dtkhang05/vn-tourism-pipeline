@@ -133,10 +133,16 @@ def province_photo_id(province: str, top_id: str) -> str:
 
 
 def photo(place_id: str, region: str) -> tuple[str, str]:
-    """(lớp CSS, thuộc tính style) cho ảnh nền; không có ảnh thì dùng khung màu theo miền."""
+    """(lớp CSS, thẻ <img>) cho ảnh thẻ; không có ảnh thì dùng khung màu theo miền.
+    Dùng <img> thay cho ảnh nền để trình duyệt tải lười và chọn bản 640px trên điện thoại."""
     img = IMAGES.get(place_id)
     if img:
-        return "", f"background-image:url('{esc(img['url'])}')"
+        url = esc(img["url"])
+        small = url.replace("/960px-", "/500px-")
+        return "", (
+            f'<img class="im" src="{url}" srcset="{small} 500w, {url} 960w" sizes="(max-width: 800px) 40vw, 960px" '
+            'loading="lazy" decoding="async" alt="">'
+        )
     return f"nophoto m-{REGION_CLASS.get(region, 'bac')}", ""
 
 
@@ -220,9 +226,9 @@ def signal_rows(r: dict, p: dict) -> str:
 
 def poster(r: dict, p: dict) -> str:
     """Thẻ top 5, tỉ lệ 16:9: hạng và tên ở góc trên trái, tỉnh ở góc dưới trái, miền, quốc tế và so với cùng kỳ ở góc dưới phải; bốn tín hiệu trong khung kính nhỏ phía trên."""
-    cls, style = photo(r["place_id"], r["region"])
+    cls, img = photo(r["place_id"], r["region"])
     return (
-        f'<article class="pc"><div class="ph {cls}" style="{style}"><span class="rk">{int(r[p["rank"]])}</span><b class="nm">{esc(r["name"])}</b>'
+        f'<article class="pc"><div class="ph {cls}">{img}<span class="rk">{int(r[p["rank"]])}</span><b class="nm">{esc(r["name"])}</b>'
         f'<span class="pt">{num(r[p["score"]])}<small>điểm</small></span><span class="pv">{esc(r["province"])}</span>{credit_short(r["place_id"])}'
         f'<div class="r">{region_chip(r["region"])}{intl_chip(r, p)}<span class="tr-wrap">{trend_html(r[p["yoy"]])}</span></div></div>'
         f'<div class="bd">{signal_rows(r, p)}{flag_html(r)}</div></article>'
@@ -231,9 +237,9 @@ def poster(r: dict, p: dict) -> str:
 
 def list_row(r: dict, p: dict) -> str:
     """Thẻ lưới tỉ lệ 16:9, không khung: hạng và tên ở góc trên trái, tỉnh ở góc dưới trái, miền, quốc tế và so với cùng kỳ ở góc dưới phải."""
-    cls, style = photo(r["place_id"], r["region"])
+    cls, img = photo(r["place_id"], r["region"])
     return (
-        f'<article class="gc"><div class="ph {cls}" style="{style}"></div>'
+        f'<article class="gc"><div class="ph {cls}">{img}</div>'
         f'<span class="rk">{int(r[p["rank"]])}</span><b class="nm">{esc(r["name"])}</b><span class="pt">{num(r[p["score"]])}</span>'
         f'<span class="pv">{esc(r["province"])}</span>'
         f'<div class="r">{region_chip(r["region"])}{intl_chip(r, p)}<span class="tr-wrap">{trend_html(r[p["yoy"]])}</span></div></article>'
@@ -243,9 +249,9 @@ def list_row(r: dict, p: dict) -> str:
 # --- tỉnh, thành
 def province_poster(r: dict, q: dict) -> str:
     place_id = province_photo_id(r["province"], r[q["top_id"]])
-    cls, style = photo(place_id, r["region"])
+    cls, img = photo(place_id, r["region"])
     return (
-        f'<article class="pc"><div class="ph {cls}" style="{style}"><span class="rk">{int(r[q["rank"]])}</span><b class="nm">{esc(r["province"])}</b>'
+        f'<article class="pc"><div class="ph {cls}">{img}<span class="rk">{int(r[q["rank"]])}</span><b class="nm">{esc(r["province"])}</b>'
         f'<span class="pt">{num(r[q["score"]])}<small>điểm</small></span><span class="pv">Nổi nhất: {esc(r[q["top"]])}</span>{credit_short(place_id)}'
         f'<div class="r">{region_chip(r["region"])}<span class="tr-wrap">{int(r[q["n"]])} điểm xếp hạng</span></div></div>'
         f'<div class="bd"><div class="rows">'
@@ -257,9 +263,9 @@ def province_poster(r: dict, q: dict) -> str:
 
 def province_row(r: dict, q: dict) -> str:
     place_id = province_photo_id(r["province"], r[q["top_id"]])
-    cls, style = photo(place_id, r["region"])
+    cls, img = photo(place_id, r["region"])
     return (
-        f'<article class="gc"><div class="ph {cls}" style="{style}"></div>'
+        f'<article class="gc"><div class="ph {cls}">{img}</div>'
         f'<span class="rk">{int(r[q["rank"]])}</span><b class="nm">{esc(r["province"])}</b><span class="pt">{num(r[q["score"]])}</span>'
         f'<span class="pv">Nổi nhất: {esc(r[q["top"]])}</span>'
         f'<div class="r">{region_chip(r["region"])}<span class="tr-wrap">{int(r[q["n"]])} điểm</span></div></article>'
@@ -316,7 +322,10 @@ if is_province:
     bg_ids = [pid for pid in bg_ids if pid in IMAGES][:5]
 else:
     bg_ids = [pid for pid in ranked["place_id"].head(8) if pid in IMAGES][:5]
-layers = "".join(f'<i style="--k:{k};background-image:url(\'{esc(IMAGES[pid]["url"])}\')"></i>' for k, pid in enumerate(bg_ids))
+layers = "".join(
+    f'<i style="--k:{k};--u:url(\'{esc(IMAGES[pid]["url"])}\');--s:url(\'{esc(IMAGES[pid]["url"].replace("/960px-", "/500px-"))}\')"></i>'
+    for k, pid in enumerate(bg_ids)
+)
 st.markdown(f'<div class="bgshow" aria-hidden="true">{layers}</div>', unsafe_allow_html=True)
 
 # ------------------------------------------------------------------ áp phích top 5
@@ -365,9 +374,9 @@ if not is_province:
     if dry:
         cards = ""
         for r in dry:
-            cls, style = photo(r["place_id"], r["region"])
+            cls, img = photo(r["place_id"], r["region"])
             cards += (
-                f'<article class="gc"><div class="ph {cls}" style="{style}"></div>'
+                f'<article class="gc"><div class="ph {cls}">{img}</div>'
                 f'<span class="rk">{int(r[p["rank"]])}</span><b class="nm">{esc(r["name"])}</b><span class="pt">{num(r[p["score"]])}</span>'
                 f'<span class="pv">{esc(r["province"])}</span>{weather_html(WX[r["place_id"]])}'
                 f'<div class="r">{region_chip(r["region"])}{intl_chip(r, p)}<span class="tr-wrap">{trend_html(r[p["yoy"]])}</span></div></article>'
