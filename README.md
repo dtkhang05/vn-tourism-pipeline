@@ -50,6 +50,15 @@ Quy tắc đi kèm (cấu hình ở `dbt/dbt_project.yml`):
 
 Một trang cuộn, nền là ảnh trình chiếu của các điểm đang đứng đầu, các khung thông số làm bằng hiệu ứng kính (glassmorphism), tôn trọng `prefers-reduced-motion`. Công tắc **Tuần này / Tháng này / Tỉnh thành** đổi toàn bộ trang; tag Tỉnh thành có xếp hạng tỉnh riêng theo tuần hoặc tháng. Top 5 xếp thành năm hàng tỉ lệ 16:9, ảnh tràn viền, khung kính nhỏ ở góc dưới bên phải chứa bốn chỉ số xếp 2x2, mỗi ô gồm nhãn, thanh cho biết điểm đó cao hơn bao nhiêu phần trăm số điểm còn lại, và giá trị thật (lượt xem mỗi ngày, tăng so với cùng kỳ, khách quốc tế, số bài báo). Màu theo miền dùng ba tông lạnh (xanh dương, xanh ngọc, tím), không dùng đỏ/vàng/xanh lá kiểu đèn giao thông. Ảnh lấy từ Wikimedia Commons, có ghi tác giả và giấy phép.
 
+![Đầu trang](docs/dashboard-top.png)
+
+![Top 5 tuần](docs/dashboard-top5.png)
+
+![Gợi ý ít mưa](docs/dashboard-picks.png)
+
+<img src="docs/dashboard-mobile.png" alt="Giao diện điện thoại" width="320">
+
+
 ## Chạy cục bộ (không cần Docker)
 
 Yêu cầu: Python 3.12+.
