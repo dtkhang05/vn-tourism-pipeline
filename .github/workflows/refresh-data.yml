@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: refresh-data
@@ -60,3 +61,9 @@ jobs:
           git diff --cached --quiet && echo "Không có thay đổi" && exit 0
           git commit -m "Cập nhật dữ liệu dashboard $(date -u +%F)"
           git push
+      - name: Mở issue báo lỗi nếu cập nhật thất bại
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --title "Cập nhật dữ liệu thất bại $(date -u +%F)"             --body "Workflow refresh-data lỗi: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. Dashboard vẫn hiện dữ liệu lần cập nhật trước." || true

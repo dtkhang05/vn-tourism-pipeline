@@ -11,6 +11,7 @@ from sqlalchemy import create_engine
 
 TOP_N = 5  # số điểm trong phần áp phích
 LIST_N = 15  # số dòng của danh sách rút gọn trước khi bấm "xem thêm"
+STALE_DAYS = 3  # số liệu cũ hơn từng này ngày thì hiện cảnh báo dữ liệu chưa được cập nhật
 WEEKEND_FLAG = 3.0  # lượt xem ngày thường gấp từng này lần cuối tuần thì gắn nhãn cảnh báo (trung vị của các điểm là ~1,2)
 REGIONS = ["Tất cả", "Miền Bắc", "Miền Trung", "Miền Nam"]
 REGION_CLASS = {"Miền Bắc": "bac", "Miền Trung": "trung", "Miền Nam": "nam"}
@@ -279,7 +280,11 @@ WX = {r["place_id"]: {"temp": float(r["temp"]), "rain": float(r["rain"])} for r 
 if not places["has_signal"].any():
     st.warning("Chưa có dữ liệu để xếp hạng. Chạy pipeline thu thập và dbt trước (xem README).")
     st.stop()
-as_of = pd.to_datetime(places["as_of_date"].iloc[0]).strftime("%d/%m/%Y")
+as_of_ts = pd.to_datetime(places["as_of_date"].iloc[0])
+as_of = as_of_ts.strftime("%d/%m/%Y")
+runs = query(QUERIES["ingest_runs"], "ingest_runs")
+refreshed = pd.to_datetime(runs["Lần chạy gần nhất"], utc=True).max().tz_convert("Asia/Ho_Chi_Minh").strftime("%H:%M %d/%m/%Y")
+stale_days = (pd.Timestamp.now(tz="Asia/Ho_Chi_Minh").normalize().tz_localize(None) - as_of_ts).days
 
 # ------------------------------------------------------------------ tiêu đề và công tắc
 st.markdown(
@@ -287,9 +292,14 @@ st.markdown(
     f"<ul class=\"points\"><li>Xếp hạng từ lượt xem Wikipedia bằng năm ngôn ngữ và độ phủ báo chí</li>"
     f"<li>Mỗi điểm được so với chính nó cùng kỳ năm trước</li>"
     f"<li>Nơi chỉ đông vì đang vào mùa sẽ không tự động đứng đầu</li></ul>"
-    f'<div class="facts"><span>{len(places)} điểm tham quan</span><span>{places["province"].nunique()} tỉnh thành</span><span>Số liệu đến {as_of}</span></div></section>',
+    f'<div class="facts"><span>{len(places)} điểm tham quan</span><span>{places["province"].nunique()} tỉnh thành</span><span>Số liệu đến {as_of}</span><span>Cập nhật lúc {refreshed}</span></div></section>',
     unsafe_allow_html=True,
 )
+if stale_days > STALE_DAYS:
+    st.markdown(
+        f'<div class="warn"><b>Dữ liệu đã cũ {stale_days} ngày.</b> Lần cập nhật tự động gần đây có thể đã lỗi, xếp hạng bên dưới chưa phản ánh những ngày mới nhất.</div>',
+        unsafe_allow_html=True,
+    )
 MODES = [*PERIODS, PROVINCE_MODE]
 mode = st.segmented_control("Xem theo", MODES, default="Tuần này", key="period", label_visibility="collapsed") or "Tuần này"
 is_province = mode == PROVINCE_MODE
@@ -467,8 +477,7 @@ with st.expander("Xem số liệu gốc của từng điểm"):
         "Cùng kỳ năm trước/ngày": st.column_config.NumberColumn(format="%.0f"), "Số bài báo giai đoạn trước": st.column_config.NumberColumn(format="%.1f"),
     })
 with st.expander("Dữ liệu cập nhật khi nào?"):
-    fresh = query(QUERIES["ingest_runs"], "ingest_runs")
-    st.dataframe(fresh, hide_index=True, width="stretch")
+    st.dataframe(runs, hide_index=True, width="stretch")
     st.caption("Trạng thái empty nghĩa là nguồn trả về 0 dòng (ví dụ Google Trends bị chặn), không phải lỗi của hệ thống.")
 with st.expander("Nguồn ảnh"):
     names = dict(zip(places["place_id"], places["name"], strict=True))
