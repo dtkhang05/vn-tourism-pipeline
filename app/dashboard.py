@@ -93,14 +93,9 @@ def _find_json(name: str) -> Path | None:
 
 
 def load_images() -> dict[str, dict]:
-    """Ảnh đại diện từ Wikimedia Commons (scripts/fetch_place_images.py và config/province_images.json). Thiếu file thì dùng khung màu.
-    Ảnh riêng của tỉnh có khóa "prov:<tên tỉnh>"; dùng cho tỉnh chỉ có một điểm, để thẻ tỉnh không lặp ảnh thẻ điểm."""
-    out: dict[str, dict] = {}
-    for name, prefix in (("place_images.json", ""), ("province_images.json", "prov:")):
-        p = _find_json(name)
-        if p:
-            out.update({prefix + k: v for k, v in _read_images(str(p), p.stat().st_mtime).items()})
-    return out
+    """Ảnh đại diện từ Wikimedia Commons (scripts/fetch_place_images.py). Thiếu file thì dùng khung màu."""
+    p = _find_json("place_images.json")
+    return _read_images(str(p), p.stat().st_mtime) if p else {}
 
 
 IMAGES = load_images()
@@ -133,16 +128,6 @@ def trend_html(change) -> str:
     if pct <= -5:
         return f'<span class="tr down">▼ {thousands(pct)}%</span>'
     return '<span class="tr flat">≈ ổn định</span>'
-
-
-PROVINCE_PHOTO: dict[str, str] = {}  # tỉnh -> mã điểm có ảnh dùng cho thẻ tỉnh; điền khi vào chế độ Tỉnh thành
-
-
-def province_photo_id(province: str, top_id: str) -> str:
-    """Thẻ tỉnh dùng ảnh khác với thẻ điểm nổi nhất của tỉnh đó: ảnh điểm thứ hai của tỉnh, hoặc ảnh riêng của tỉnh nếu tỉnh chỉ có một điểm."""
-    if province in PROVINCE_PHOTO:
-        return PROVINCE_PHOTO[province]
-    return f"prov:{province}" if f"prov:{province}" in IMAGES else top_id
 
 
 def photo(place_id: str, region: str) -> tuple[str, str]:
@@ -261,7 +246,7 @@ def list_row(r: dict, p: dict) -> str:
 
 # --- tỉnh, thành
 def province_poster(r: dict, q: dict) -> str:
-    place_id = province_photo_id(r["province"], r[q["top_id"]])
+    place_id = r[q["top_id"]]
     cls, img = photo(place_id, r["region"])
     return (
         f'<article class="pc"><div class="ph {cls}">{img}<span class="rk">{int(r[q["rank"]])}</span><b class="nm">{esc(r["province"])}</b>'
@@ -275,7 +260,7 @@ def province_poster(r: dict, q: dict) -> str:
 
 
 def province_row(r: dict, q: dict) -> str:
-    place_id = province_photo_id(r["province"], r[q["top_id"]])
+    place_id = r[q["top_id"]]
     cls, img = photo(place_id, r["region"])
     return (
         f'<article class="gc"><div class="ph {cls}">{img}</div>'
@@ -318,18 +303,9 @@ ranked = places[places[p["has"]]].sort_values(p["rank"])
 q = PROVINCE_COLS[sub]
 prov_ranked = provinces[provinces[q["rank"]].notna()].sort_values(q["rank"])
 
-# Ảnh thẻ tỉnh: lấy điểm có ảnh đứng thứ hai trong tỉnh (theo kỳ đang xem) để khác với ảnh của điểm nổi nhất.
+# Nền: ảnh các điểm (hoặc điểm nổi nhất của các tỉnh) đang đứng đầu, đổi theo công tắc.
 if is_province:
-    by_score = places[places[p["has"]]].sort_values(p["score"], ascending=False)
-    for _, r_ in prov_ranked.iterrows():
-        others = [pid for pid in by_score.loc[by_score["province"] == r_["province"], "place_id"] if pid != r_[q["top_id"]] and pid in IMAGES]
-        if others:
-            PROVINCE_PHOTO[r_["province"]] = others[0]
-
-# Nền: ảnh các điểm (hoặc ảnh thẻ của các tỉnh) đang đứng đầu, đổi theo công tắc.
-if is_province:
-    bg_ids = [province_photo_id(r_["province"], r_[q["top_id"]]) for _, r_ in prov_ranked.head(8).iterrows()]
-    bg_ids = [pid for pid in bg_ids if pid in IMAGES][:5]
+    bg_ids = [pid for pid in prov_ranked[q["top_id"]].head(8) if pid in IMAGES][:5]
 else:
     bg_ids = [pid for pid in ranked["place_id"].head(8) if pid in IMAGES][:5]
 layers = "".join(
@@ -506,7 +482,7 @@ with st.expander("Nguồn ảnh"):
         )
 
     def label(pid: str) -> str:
-        return pid.removeprefix("prov:") + " (tỉnh)" if pid.startswith("prov:") else names.get(pid, pid)
+        return names.get(pid, pid)
 
     items = sorted(IMAGES.items(), key=lambda kv: label(kv[0]))
     rows = ""
