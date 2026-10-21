@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 
+import altair as alt
 import pandas as pd
 import pydeck as pdk
 import streamlit as st
@@ -11,6 +12,8 @@ from sqlalchemy import create_engine
 
 TOP_N = 5  # số điểm trong phần áp phích
 LIST_N = 15  # số dòng của danh sách rút gọn trước khi bấm "xem thêm"
+COMPARE_MAX = 4  # số điểm tối đa trong phần so sánh
+COMPARE_COLORS = ["#6EA8FF", "#2DD4BF", "#B79BFF", "#6FD6F2"]  # tông lạnh, theo quy ước không dùng đỏ/vàng/xanh lá
 STALE_DAYS = 3  # số liệu cũ hơn từng này ngày thì hiện cảnh báo dữ liệu chưa được cập nhật
 WEEKEND_FLAG = 3.0  # lượt xem ngày thường gấp từng này lần cuối tuần thì gắn nhãn cảnh báo (trung vị của các điểm là ~1,2)
 REGIONS = ["Tất cả", "Miền Bắc", "Miền Trung", "Miền Nam"]
@@ -429,6 +432,61 @@ else:
             st.markdown("Lượng quan tâm thuộc nhóm thấp nhất hoặc chưa đủ tín hiệu, nên mức tăng giảm chỉ là nhiễu: " + ", ".join(esc(n) for n in unranked["name"]) + ".")
 
 # ------------------------------------------------------------------ bản đồ
+# ------------------------------------------------------------------ so sánh điểm
+st.markdown('<h2 class="sec">So sánh các điểm</h2>', unsafe_allow_html=True)
+st.markdown(
+    f'<p class="sec-sub">Gõ tên để tìm, chọn từ 2 đến {COMPARE_MAX} điểm. Số liệu theo {p["label"]} đang xem.</p>',
+    unsafe_allow_html=True,
+)
+cmp_label = {r["place_id"]: f'{r["name"]} ({r["province"]})' for r in places.to_dict("records")}
+cmp_default = list(ranked["place_id"].head(3))
+cmp_ids = st.multiselect(
+    "Điểm cần so sánh", options=sorted(cmp_label, key=lambda k: cmp_label[k]), default=cmp_default, format_func=cmp_label.get,
+    max_selections=COMPARE_MAX, key="compare", placeholder="Gõ tên điểm hoặc tỉnh",
+)
+if len(cmp_ids) < 2:
+    st.caption("Chọn ít nhất hai điểm để so sánh.")
+else:
+    sel = places.set_index("place_id").loc[cmp_ids]
+
+    def cell(v, fmt) -> str:
+        return "chưa có" if pd.isna(v) else fmt(v)
+
+    def pct_fmt(v) -> str:
+        return f"{v * 100:+.0f}%"
+
+    rows = {
+        "Hạng": lambda r: f'{int(r[p["rank"]])}' if pd.notna(r[p["rank"]]) else "chưa xếp hạng",
+        "Điểm hot": lambda r: cell(r[p["score"]], lambda v: num(v)),
+        "Tỉnh, miền": lambda r: f'{r["province"]}, {r["region"]}',
+        "Quan tâm (lượt xem/ngày)": lambda r: cell(r[p["level"]], thousands),
+        "So với cùng kỳ năm trước": lambda r: cell(r[p["yoy"]], pct_fmt),
+        "Quốc tế (lượt xem/ngày)": lambda r: cell(r[p["intl"]], thousands),
+        "Quốc tế so với cùng kỳ": lambda r: cell(r[p["iyoy"]], pct_fmt),
+        "Bài báo giai đoạn này": lambda r: cell(r[p["news"]], thousands),
+    }
+    table = pd.DataFrame({cmp_label[pid]: {k: fn(sel.loc[pid]) for k, fn in rows.items()} for pid in cmp_ids})
+    st.dataframe(table, width="stretch")
+    sig = pd.DataFrame(
+        {cmp_label[pid]: [sel.loc[pid, p[c]] * 100 for c in ("pa", "py", "pi", "pn")] for pid in cmp_ids},
+        index=["Quan tâm", "Cùng kỳ", "Quốc tế", "Báo chí"],
+    )
+    long = sig.reset_index(names="Tín hiệu").melt(id_vars="Tín hiệu", var_name="Điểm", value_name="Vị trí (0-100)")
+    chart = (
+        alt.Chart(long)
+        .mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3)
+        .encode(
+            x=alt.X("Tín hiệu:N", sort=["Quan tâm", "Cùng kỳ", "Quốc tế", "Báo chí"], axis=alt.Axis(labelAngle=0, title=None)),
+            xOffset="Điểm:N",
+            y=alt.Y("Vị trí (0-100):Q", scale=alt.Scale(domain=[0, 100])),
+            color=alt.Color("Điểm:N", scale=alt.Scale(domain=list(sig.columns), range=COMPARE_COLORS[: len(cmp_ids)]), legend=alt.Legend(orient="bottom", title=None, columns=1, labelLimit=0)),
+            tooltip=["Điểm", "Tín hiệu", alt.Tooltip("Vị trí (0-100):Q", format=".0f")],
+        )
+        .properties(height=300)
+    )
+    st.altair_chart(chart, width="stretch")
+    st.caption("Mỗi cột là vị trí của điểm so với các điểm còn lại ở tín hiệu đó (0 đến 100, càng cao càng nổi bật). Điểm hot là trung bình bốn cột.")
+
 st.markdown(f'<h2 class="sec">Trên bản đồ, theo {p["label"]}</h2>', unsafe_allow_html=True)
 map_df = places.assign(score=places[p["score"]].round(1), radius=places[p["score"]].fillna(0).mul(350).add(8000), color=places["region"].map(REGION_RGB))
 st.pydeck_chart(
