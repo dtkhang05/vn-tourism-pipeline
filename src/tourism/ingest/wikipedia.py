@@ -18,6 +18,7 @@ log = logging.getLogger(__name__)
 API = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{lang}.wikipedia/all-access/user/{title}/daily/{start}/{end}"
 VI_API = "https://vi.wikipedia.org/w/api.php"
 FOREIGN_LANGS = ("en", "ko", "zh", "ja")
+MAX_FAILED_SHARE = 0.02  # quá tỉ lệ bài lỗi này thì cả lần thu thập bị coi là lỗi
 
 
 def fetch_pageviews(lang: str, title: str, start: date, end: date) -> list[tuple[date, int]]:
@@ -65,16 +66,22 @@ def run(dry_run: bool = False, days: int = 14) -> int:
             upsert(cur, "raw.place_wiki_titles", ["place_id", "lang", "title"], sorted(targets), ["place_id", "lang", "title"])
 
     views: dict[tuple[str, str, date], int] = defaultdict(int)  # cộng lượt xem của các bài cùng điểm, cùng ngôn ngữ
+    failed: list[tuple[str, str, str]] = []
     for pid, lang, title in sorted(targets):
         try:
             for d, v in fetch_pageviews(lang, title, start, end):
                 views[(pid, lang, d)] += v
         except Exception as exc:  # noqa: BLE001 - một bài lỗi không làm hỏng cả lô
             log.warning("Bỏ qua %s/%s/%s: %s", pid, lang, title, exc)
-        time.sleep(0.08)  # lịch sự với API công cộng
+            failed.append((pid, lang, title))
+        time.sleep(0.25)  # lịch sự với API công cộng; nhanh hơn thì bị giới hạn tần suất (429) khi có hơn ~60 điểm
     rows = [(pid, lang, d, v) for (pid, lang, d), v in views.items()]
     if dry_run:
         print(rows[:3], len(targets), "bài")
         return len(rows)
     with transaction() as cur:
-        return upsert(cur, "raw.wiki_pageviews", ["place_id", "lang", "date", "views"], rows, ["place_id", "lang", "date"])
+        written = upsert(cur, "raw.wiki_pageviews", ["place_id", "lang", "date", "views"], rows, ["place_id", "lang", "date"])
+    # Thiếu dữ liệu của vài bài làm lệch xếp hạng mà không ai biết, nên quá ngưỡng thì báo lỗi để chặn bước phía sau.
+    if len(failed) > max(2, int(len(targets) * MAX_FAILED_SHARE)):
+        raise RuntimeError(f"{len(failed)}/{len(targets)} bài Wikipedia không lấy được lượt xem (bị giới hạn tần suất?), ví dụ {failed[:3]}")
+    return written
