@@ -1,5 +1,7 @@
 # VN Tourism Pipeline
 
+**Xem dashboard trực tuyến: https://vn-tourism-pipeline-espbfwvqhpmwcobrjt4hs8.streamlit.app/**
+
 Pipeline dữ liệu near-real-time phát hiện **điểm du lịch đang được quan tâm nhiều ở Việt Nam**: thu thập từ nhiều nguồn độc lập, xử lý, mô hình hóa bằng dbt, điều phối bằng Airflow và hiển thị trên dashboard dạng áp phích có công tắc Tuần/Tháng.
 
 ```
