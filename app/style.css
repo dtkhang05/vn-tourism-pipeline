@@ -322,3 +322,10 @@ table.credits-tb a { color: #6FD6F2; }
   .gc, .picks .pick { box-shadow: none; }
   .hero .facts span, .gc .rk, .gc .pt, .pc .rk, .pc .pt { background: rgba(9,24,54,.85); }
 }
+
+/* Điện thoại: dòng ghi nguồn ảnh chiếm cả hàng đáy; tên tỉnh nằm trên dòng đó, nhãn miền, quốc tế và tăng giảm nằm ngay phía trên, không đè lên nhau. */
+@media (max-width: 800px) {
+  .pc .credit { left: .95rem; right: .8rem; bottom: .45rem; max-width: none; }
+  .pc .r { bottom: 2.9rem; }
+  .pc .pv { bottom: 1.5rem; max-width: calc(100% - 1.9rem); }
+}
