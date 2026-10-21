@@ -157,3 +157,7 @@ Dashboard đọc Postgres khi chạy cục bộ. Bản đưa lên web không có
 2. Vào https://share.streamlit.io, đăng nhập bằng GitHub, chọn **Create app**: repository `dtkhang05/vn-tourism-pipeline`,
    branch `main`, file chính `app/dashboard.py`. Mỗi lần push, Streamlit Cloud tự nạp lại trang.
 3. Dependencies lấy từ `app/requirements.txt`.
+
+Workflow `refresh-data` chạy mỗi ngày: thu thập, dbt, xuất snapshot và commit. Lịch sử xếp hạng từng ngày được cộng dồn trong
+`app/snapshot/history.parquet` (mỗi ngày số liệu một lượt, chạy lại không nhân đôi), dashboard dùng nó để vẽ biểu đồ xu hướng
+khi có từ hai ngày trở lên. Nếu workflow lỗi, nó tự mở một issue trên GitHub, và dashboard hiện cảnh báo khi số liệu cũ hơn 3 ngày.

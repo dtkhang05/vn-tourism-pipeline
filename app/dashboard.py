@@ -465,6 +465,21 @@ st.markdown(
     "Google Trends chưa dùng được vì bị Google chặn. Hãy coi đây là gợi ý để tìm hiểu thêm, và kiểm tra giá vé, thời tiết, tình hình thực tế trước khi quyết định.</div>",
     unsafe_allow_html=True,
 )
+with st.expander("Xu hướng điểm theo ngày"):
+    hist_path = SNAPSHOT_DIR / "history.parquet"
+    hist = pd.read_parquet(hist_path) if hist_path.exists() else pd.DataFrame()
+    top_ids = list(ranked["place_id"].head(TOP_N))
+    if hist.empty or hist["as_of_date"].nunique() < 2:
+        since = f" từ ngày {pd.to_datetime(hist['as_of_date'].min()).strftime('%d/%m/%Y')}" if not hist.empty else ""
+        st.caption(f"Lịch sử xếp hạng được ghi mỗi ngày{since}. Biểu đồ sẽ hiện khi có ít nhất hai ngày số liệu.")
+    else:
+        names_by_id = dict(zip(places["place_id"], places["name"], strict=True))
+        h = hist[hist["place_id"].isin(top_ids)].copy()
+        h["Điểm"] = h["place_id"].map(names_by_id)
+        h["Ngày"] = pd.to_datetime(h["as_of_date"])
+        wide = h.pivot_table(index="Ngày", columns="Điểm", values=p["score"], aggfunc="last")
+        st.line_chart(wide, height=320)
+        st.caption(f"Điểm hot {p['label']} của {len(top_ids)} điểm đang đứng đầu, theo ngày số liệu.")
 with st.expander("Xem số liệu gốc của từng điểm"):
     ev = ranked[["name", "province", p["rank"], p["score"], p["vi"], p["intl"], p["ly"], p["yoy"], p["news"], p["news_base"], p["pa"], p["py"], p["pi"], p["pn"]]].copy()
     ev[p["yoy"]] = ev[p["yoy"]].mul(100)

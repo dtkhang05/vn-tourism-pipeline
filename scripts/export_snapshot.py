@@ -14,6 +14,19 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "app"))
 from queries import QUERIES
 
+HISTORY_COLS = ["as_of_date", "place_id", "hot_rank", "hot_score", "hot_rank_30d", "hot_score_30d"]
+
+
+def append_history(places: pd.DataFrame, path: Path) -> None:
+    """Thêm xếp hạng của ngày số liệu hiện tại vào lịch sử (mỗi ngày một lượt, chạy lại cùng ngày thì ghi đè)."""
+    today = places[HISTORY_COLS].copy()
+    today["as_of_date"] = pd.to_datetime(today["as_of_date"]).dt.date
+    old = pd.read_parquet(path) if path.exists() else today.iloc[0:0]
+    hist = pd.concat([old[~old["as_of_date"].isin(today["as_of_date"])], today], ignore_index=True)
+    hist = hist.sort_values(["as_of_date", "place_id"]).reset_index(drop=True)
+    hist.to_parquet(path, index=False)
+    print(f"history: {hist['as_of_date'].nunique()} ngày, {len(hist)} dòng")
+
 
 def main() -> None:
     url = "postgresql+psycopg2://{u}:{p}@{h}:{port}/{db}".format(
@@ -27,6 +40,8 @@ def main() -> None:
         df = pd.read_sql(sql, engine)
         df.to_parquet(out / f"{name}.parquet", index=False)
         print(f"{name}: {len(df)} dòng")
+        if name == "places":
+            append_history(df, out / "history.parquet")
 
 
 if __name__ == "__main__":
