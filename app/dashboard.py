@@ -112,6 +112,14 @@ def trend_html(change) -> str:
     return '<span class="tr flat">≈ ổn định</span>'
 
 
+PROVINCE_PHOTO: dict[str, str] = {}  # tỉnh -> mã điểm có ảnh dùng cho thẻ tỉnh; điền khi vào chế độ Tỉnh thành
+
+
+def province_photo_id(province: str, top_id: str) -> str:
+    """Thẻ tỉnh dùng ảnh khác với thẻ điểm nổi nhất của tỉnh đó, nên ảnh điểm đứng đầu không bị lặp ở hai tab."""
+    return PROVINCE_PHOTO.get(province, top_id)
+
+
 def photo(place_id: str, region: str) -> tuple[str, str]:
     """(lớp CSS, thuộc tính style) cho ảnh nền; không có ảnh thì dùng khung màu theo miền."""
     img = IMAGES.get(place_id)
@@ -222,7 +230,7 @@ def list_row(r: dict, p: dict) -> str:
 
 # --- tỉnh, thành
 def province_poster(r: dict, q: dict) -> str:
-    place_id = r[q["top_id"]]
+    place_id = province_photo_id(r["province"], r[q["top_id"]])
     cls, style = photo(place_id, r["region"])
     return (
         f'<article class="pc"><div class="ph {cls}" style="{style}"><span class="rk">{int(r[q["rank"]])}</span><b class="nm">{esc(r["province"])}</b>'
@@ -236,7 +244,7 @@ def province_poster(r: dict, q: dict) -> str:
 
 
 def province_row(r: dict, q: dict) -> str:
-    place_id = r[q["top_id"]]
+    place_id = province_photo_id(r["province"], r[q["top_id"]])
     cls, style = photo(place_id, r["region"])
     return (
         f'<article class="gc"><div class="ph {cls}" style="{style}"></div>'
@@ -262,7 +270,7 @@ as_of = pd.to_datetime(places["as_of_date"].iloc[0]).strftime("%d/%m/%Y")
 
 # ------------------------------------------------------------------ tiêu đề và công tắc
 st.markdown(
-    f'<section class="hero"><h1>Cả nước đang đổ về đâu?</h1>'
+    f'<section class="hero"><h1>Việt Nam đang hot ở đâu?</h1>'
     f"<ul class=\"points\"><li>Xếp hạng từ lượt xem Wikipedia bằng năm ngôn ngữ và độ phủ báo chí</li>"
     f"<li>Mỗi điểm được so với chính nó cùng kỳ năm trước</li>"
     f"<li>Nơi chỉ đông vì đang vào mùa sẽ không tự động đứng đầu</li></ul>"
@@ -282,9 +290,18 @@ ranked = places[places[p["has"]]].sort_values(p["rank"])
 q = PROVINCE_COLS[sub]
 prov_ranked = provinces[provinces[q["rank"]].notna()].sort_values(q["rank"])
 
-# Nền: ảnh các điểm (hoặc điểm nổi nhất của các tỉnh) đang đứng đầu, đổi theo công tắc.
+# Ảnh thẻ tỉnh: lấy điểm có ảnh đứng thứ hai trong tỉnh (theo kỳ đang xem) để khác với ảnh của điểm nổi nhất.
 if is_province:
-    bg_ids = [pid for pid in prov_ranked[q["top_id"]].head(8) if pid in IMAGES][:5]
+    by_score = places[places[p["has"]]].sort_values(p["score"], ascending=False)
+    for _, r_ in prov_ranked.iterrows():
+        others = [pid for pid in by_score.loc[by_score["province"] == r_["province"], "place_id"] if pid != r_[q["top_id"]] and pid in IMAGES]
+        if others:
+            PROVINCE_PHOTO[r_["province"]] = others[0]
+
+# Nền: ảnh các điểm (hoặc ảnh thẻ của các tỉnh) đang đứng đầu, đổi theo công tắc.
+if is_province:
+    bg_ids = [province_photo_id(r_["province"], r_[q["top_id"]]) for _, r_ in prov_ranked.head(8).iterrows()]
+    bg_ids = [pid for pid in bg_ids if pid in IMAGES][:5]
 else:
     bg_ids = [pid for pid in ranked["place_id"].head(8) if pid in IMAGES][:5]
 layers = "".join(f'<i style="--k:{k};background-image:url(\'{esc(IMAGES[pid]["url"])}\')"></i>' for k, pid in enumerate(bg_ids))
