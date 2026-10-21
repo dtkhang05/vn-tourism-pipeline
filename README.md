@@ -13,6 +13,15 @@ Google Trends (tùy chọn, thường bị chặn) ─────────�
                               Airflow: chạy mỗi 3 giờ, ingest song song → trích địa danh → dbt run → dbt test
 ```
 
+## Hai cách chạy
+
+| | Mục đích | Cách hoạt động |
+|---|---|---|
+| **Bản trực tuyến** | Dashboard công khai | GitHub Actions (`refresh-data`, 09:00 giờ Việt Nam mỗi ngày) dựng Postgres tạm, thu thập lại toàn bộ dữ liệu, chạy dbt và test, xuất snapshot vào `app/snapshot/` rồi commit. Streamlit Cloud thấy commit mới thì nạp lại trang. Không cần máy nào bật |
+| **Stack cục bộ (Docker)** | Phát triển và trình diễn đầy đủ | Airflow điều phối ingest song song, dbt run và test mỗi 3 giờ trên Postgres thật; dashboard đọc thẳng Postgres |
+
+Cả hai dùng chung mã ingest và dbt. Bản trực tuyến không giữ CSDL giữa các lần chạy, chỉ giữ snapshot và lịch sử xếp hạng (`app/snapshot/history.parquet`).
+
 ## Mô hình dữ liệu hai tầng
 
 Xếp hạng ở mức **điểm tham quan cụ thể** (51 điểm như Hồ Gươm, Fansipan, Bà Nà Hills, Tràng An), mỗi điểm thuộc một **tỉnh/thành** (22 đơn vị, theo 34 đơn vị hành chính từ 7/2025) và một miền. Bảng tỉnh/thành là phép gộp bên trên, không phải đơn vị xếp hạng chính.
@@ -27,6 +36,8 @@ Xếp hạng ở mức **điểm tham quan cụ thể** (51 điểm như Hồ G�
 | Cùng kỳ | `ln((TB nay + K) / (TB cùng kỳ năm trước + K))`, lùi 364 ngày để trùng thứ trong tuần | Loại bỏ mùa vụ: chỉ phần tăng bất thường mới được tính |
 | Quốc tế | Như trên, chỉ tính bài tiếng Anh, Hàn, Trung, Nhật | Người đọc các bản này chủ yếu sắp đi du lịch, không bị lịch học và làm việc ở Việt Nam chi phối |
 | Báo chí | Số bài báo nhắc tên (Google News) giai đoạn gần nhất so với 4 tuần trước | Nguồn độc lập với Wikipedia, có lịch sử ngay từ lần chạy đầu |
+
+**Ví dụ với số thật** (số liệu đến 20/10/2026, tuần): Đảo Phú Quốc có ~245 lượt xem tiếng Việt mỗi ngày và ~676 lượt ngoại ngữ, thấp hơn một chút so với cùng kỳ năm trước (-8,6%) nhưng khách quốc tế tăng 5%, 29 bài báo trong tuần. Trong 38 điểm được xếp, nó đứng ở phần trăm thứ 94,6 về quan tâm, 86,5 về cùng kỳ, 76,5 về quốc tế và 94,6 về báo chí. Trung bình bốn số này là **88,0**, hạng 1. Hồ Gươm có lượt xem cao nhất (phần trăm 100) và đứng sau Phú Quốc chỉ vì tín hiệu quốc tế thấp hơn (64,7).
 
 Quy tắc đi kèm (cấu hình ở `dbt/dbt_project.yml`):
 
@@ -95,12 +106,15 @@ DB đã có từ trước phải chạy migration `sql/migrations/002_multilang_
 ```
 config/      tỉnh/thành và điểm tham quan (places.yml), nguồn RSS (sources.yml), ảnh và giấy phép (place_images.json)
 src/tourism/ ingest/ (news, wikipedia, news_volume, weather, trends, mentions), places.py, db.py, cli.py
-scripts/     check_wiki_titles.py (kiểm tra tên bài), fetch_place_images.py (ảnh từ Commons)
+scripts/     check_wiki_titles.py (kiểm tra tên bài), fetch_place_images.py (ảnh từ Commons), export_snapshot.py (xuất dữ liệu cho bản trực tuyến)
 sql/init/    schema raw, chạy khi Postgres khởi tạo lần đầu
 sql/migrations/  chuyển DB đã có sang schema mới (001: hai tầng; 002: đa ngôn ngữ và số bài báo)
 dbt/         staging → marts (fct_place_daily_signals, fct_hot_score, fct_hot_score_month, mart_hot_places_latest, mart_hot_provinces_latest)
 dags/        DAG Airflow
-app/         dashboard Streamlit (dashboard.py, style.css); .streamlit/ chứa theme
+app/         dashboard Streamlit (dashboard.py, style.css, queries.py); snapshot/ chứa dữ liệu bản trực tuyến và lịch sử xếp hạng
+.github/     CI (ci.yml) và cập nhật dữ liệu hằng ngày (refresh-data.yml)
+docs/        ảnh chụp dashboard dùng trong README
+.streamlit/  theme
 tests/       pytest
 ```
 
