@@ -1,0 +1,75 @@
+x-pg-env: &pg-env
+  PGHOST: postgres
+  PGPORT: "5432"
+  PGDATABASE: tourism
+  PGUSER: ${POSTGRES_USER:-tourism}
+  PGPASSWORD: ${POSTGRES_PASSWORD:-tourism}
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-tourism}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tourism}
+      POSTGRES_DB: tourism
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d tourism"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  airflow:
+    build:
+      context: .
+      dockerfile: docker/airflow.Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *pg-env
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER:-tourism}:${POSTGRES_PASSWORD:-tourism}@postgres:5432/airflow
+      CONFIG_DIR: /opt/airflow/project/config
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/project/src
+      - ./config:/opt/airflow/project/config
+      - ./dbt:/opt/airflow/project/dbt
+    command: standalone
+
+  # Chạy thủ công: docker compose run --rm dbt run --profiles-dir .   (hoặc test, build)
+  dbt:
+    profiles: ["tools"]
+    build:
+      context: .
+      dockerfile: docker/dbt.Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *pg-env
+    volumes:
+      - ./dbt:/dbt
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/dashboard.Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      <<: *pg-env
+    ports:
+      - "8501:8501"
+
+volumes:
+  pgdata:

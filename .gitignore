@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+.venv-dbt/
+airflow-build.log
+.env
+.pytest_cache/
+.ruff_cache/
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+
+*.log
+streamlit.log
+dbt/.user.yml

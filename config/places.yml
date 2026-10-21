@@ -1,0 +1,96 @@
+# Hai tầng: tỉnh/thành (theo 34 đơn vị hành chính từ 7/2025) và điểm tham quan cụ thể thuộc tỉnh đó.
+# Xếp hạng được tính ở mức điểm tham quan; tỉnh/thành chỉ là phép gộp bên trên.
+#
+# `aliases`: cách báo chí gọi địa điểm (đã bỏ dấu khi so khớp). Tránh alias chung chung như "phố cổ", "biển".
+# `wiki_title`: tên bài trên vi.wikipedia.org dùng cho Pageviews API. PHẢI là bài đích thật, không phải trang chuyển hướng
+#   hay trang định hướng (Pageviews chỉ đếm lượt vào đúng tên đó). Kiểm tra bằng: python scripts/check_wiki_titles.py
+provinces:
+  - {id: quang-ninh, name: Quảng Ninh, region: Miền Bắc}
+  - {id: hai-phong, name: Hải Phòng, region: Miền Bắc}
+  - {id: ha-noi, name: Hà Nội, region: Miền Bắc}
+  - {id: ninh-binh, name: Ninh Bình, region: Miền Bắc}
+  - {id: lao-cai, name: Lào Cai, region: Miền Bắc}
+  - {id: tuyen-quang, name: Tuyên Quang, region: Miền Bắc}
+  - {id: cao-bang, name: Cao Bằng, region: Miền Bắc}
+  - {id: thai-nguyen, name: Thái Nguyên, region: Miền Bắc}
+  - {id: son-la, name: Sơn La, region: Miền Bắc}
+  - {id: thanh-hoa, name: Thanh Hóa, region: Miền Trung}
+  - {id: quang-tri, name: Quảng Trị, region: Miền Trung}
+  - {id: hue, name: Huế, region: Miền Trung}
+  - {id: da-nang, name: Đà Nẵng, region: Miền Trung}
+  - {id: quang-ngai, name: Quảng Ngãi, region: Miền Trung}
+  - {id: gia-lai, name: Gia Lai, region: Miền Trung}
+  - {id: dak-lak, name: Đắk Lắk, region: Miền Trung}
+  - {id: khanh-hoa, name: Khánh Hòa, region: Miền Trung}
+  - {id: lam-dong, name: Lâm Đồng, region: Miền Trung}
+  - {id: tp-hcm, name: TP. Hồ Chí Minh, region: Miền Nam}
+  - {id: an-giang, name: An Giang, region: Miền Nam}
+  - {id: can-tho, name: Cần Thơ, region: Miền Nam}
+  - {id: ca-mau, name: Cà Mau, region: Miền Nam}
+
+places:
+  # --- Quảng Ninh
+  - {id: vinh-ha-long, name: Vịnh Hạ Long, province: quang-ninh, lat: 20.9101, lon: 107.1839, wiki_title: Vịnh_Hạ_Long, trends_keyword: Vịnh Hạ Long, aliases: [Vịnh Hạ Long, Hạ Long, Ha Long]}
+  - {id: yen-tu, name: Yên Tử, province: quang-ninh, lat: 21.1688, lon: 106.7243, wiki_title: Yên_Tử, image_title: Chùa_Đồng, trends_keyword: Yên Tử, aliases: [Yên Tử, Yen Tu]}
+  - {id: co-to, name: Đảo Cô Tô, province: quang-ninh, lat: 21.0407, lon: 107.7633, wiki_title: Cô_Tô_(đặc_khu), trends_keyword: đảo Cô Tô, aliases: [Cô Tô, Co To]}
+  # --- Hải Phòng
+  - {id: cat-ba, name: Đảo Cát Bà, province: hai-phong, lat: 20.7272, lon: 107.0489, wiki_title: Quần_đảo_Cát_Bà, trends_keyword: đảo Cát Bà, aliases: [Cát Bà, Cat Ba]}
+  # --- Hà Nội
+  - {id: ho-guom, name: Hồ Gươm, province: ha-noi, lat: 21.0287, lon: 105.8522, wiki_title: Hồ_Hoàn_Kiếm, trends_keyword: Hồ Gươm, aliases: [Hồ Gươm, Hồ Hoàn Kiếm, Tháp Rùa]}
+  - {id: van-mieu, name: Văn Miếu - Quốc Tử Giám, province: ha-noi, lat: 21.0293, lon: 105.8355, wiki_title: Văn_Miếu_–_Quốc_Tử_Giám, image_title: Khuê_Văn_Các, commons_category: "Constellation of Literature pavilion (Temple of Literature, Hanoi)", trends_keyword: Văn Miếu Quốc Tử Giám, aliases: [Văn Miếu, Quốc Tử Giám]}
+  - {id: lang-bac, name: Lăng Bác, province: ha-noi, lat: 21.0368, lon: 105.8346, wiki_title: Lăng_Chủ_tịch_Hồ_Chí_Minh, trends_keyword: Lăng Bác, aliases: [Lăng Bác, Lăng Chủ tịch Hồ Chí Minh]}
+  - {id: pho-co-ha-noi, name: Phố cổ Hà Nội, province: ha-noi, lat: 21.0340, lon: 105.8500, wiki_title: Khu_phố_cổ_Hà_Nội, trends_keyword: phố cổ Hà Nội, aliases: [Phố cổ Hà Nội, Hanoi Old Quarter, Hàng Mã, Tạ Hiện]}
+  - {id: chua-huong, name: Chùa Hương, province: ha-noi, lat: 20.6178, lon: 105.7436, wiki_title: Chùa_Hương, trends_keyword: chùa Hương, aliases: [Chùa Hương, Hương Sơn]}
+  - {id: ba-vi, name: Vườn quốc gia Ba Vì, province: ha-noi, lat: 21.0667, lon: 105.3667, wiki_title: Dãy_núi_Ba_Vì, trends_keyword: Ba Vì, aliases: [Ba Vì, Ba Vi]}
+  # --- Ninh Bình
+  - {id: trang-an, name: Tràng An, province: ninh-binh, lat: 20.2540, lon: 105.9040, wiki_title: Quần_thể_danh_thắng_Tràng_An, trends_keyword: Tràng An Ninh Bình, aliases: [Tràng An, Trang An]}
+  - {id: tam-coc, name: Tam Cốc - Bích Động, province: ninh-binh, lat: 20.2150, lon: 105.9370, wiki_title: Tam_Cốc_–_Bích_Động, trends_keyword: Tam Cốc, aliases: [Tam Cốc, Tam Coc, Bích Động]}
+  - {id: bai-dinh, name: Chùa Bái Đính, province: ninh-binh, lat: 20.2750, lon: 105.8650, wiki_title: Chùa_Bái_Đính, trends_keyword: chùa Bái Đính, aliases: [Bái Đính, Bai Dinh]}
+  - {id: cuc-phuong, name: Vườn quốc gia Cúc Phương, province: ninh-binh, lat: 20.3400, lon: 105.6100, wiki_title: Vườn_quốc_gia_Cúc_Phương, trends_keyword: Cúc Phương, aliases: [Cúc Phương, Cuc Phuong]}
+  # --- Lào Cai
+  - {id: sa-pa, name: Sa Pa, province: lao-cai, lat: 22.3364, lon: 103.8438, wiki_title: Sa_Pa, extra_wiki_titles: ["Sa_Pa_(thị_xã)"], image_title: Núi_Hàm_Rồng, commons_category: Sa Pa, trends_keyword: du lịch Sapa, aliases: [Sa Pa, Sapa]}
+  - {id: fansipan, name: Đỉnh Fansipan, province: lao-cai, lat: 22.3033, lon: 103.7750, wiki_title: Fansipan, trends_keyword: Fansipan, aliases: [Fansipan, Phan Xi Păng]}
+  - {id: mu-cang-chai, name: Mù Cang Chải, province: lao-cai, lat: 21.8537, lon: 104.0873, wiki_title: Mù_Cang_Chải_(huyện), trends_keyword: Mù Cang Chải, aliases: [Mù Cang Chải, Mu Cang Chai]}
+  # --- Tuyên Quang, Cao Bằng, Thái Nguyên, Sơn La
+  - {id: dong-van, name: Cao nguyên đá Đồng Văn, province: tuyen-quang, lat: 23.2780, lon: 105.3610, wiki_title: Cao_nguyên_đá_Đồng_Văn, trends_keyword: Đồng Văn Hà Giang, aliases: [Đồng Văn, Mã Pì Lèng, Mã Pí Lèng, Cột cờ Lũng Cú, Lũng Cú]}
+  - {id: thac-ban-gioc, name: Thác Bản Giốc, province: cao-bang, lat: 22.8553, lon: 106.7234, wiki_title: Thác_Bản_Giốc, trends_keyword: thác Bản Giốc, aliases: [Bản Giốc, Ban Gioc]}
+  - {id: ba-be, name: Hồ Ba Bể, province: thai-nguyen, lat: 22.4150, lon: 105.6150, wiki_title: Hồ_Ba_Bể, image_title: Vườn_quốc_gia_Ba_Bể, trends_keyword: hồ Ba Bể, aliases: [Ba Bể, Ba Be]}
+  - {id: moc-chau, name: Cao nguyên Mộc Châu, province: son-la, lat: 20.8394, lon: 104.6417, wiki_title: Cao_nguyên_Mộc_Châu, commons_category: Moc Chau, trends_keyword: Mộc Châu, aliases: [Mộc Châu, Moc Chau]}
+  # --- Thanh Hóa, Quảng Trị
+  - {id: sam-son, name: Biển Sầm Sơn, province: thanh-hoa, lat: 19.7318, lon: 105.9006, wiki_title: Sầm_Sơn_(thành_phố), trends_keyword: Sầm Sơn, aliases: [Sầm Sơn, Sam Son]}
+  - {id: phong-nha, name: Phong Nha - Kẻ Bàng, province: quang-tri, lat: 17.5918, lon: 106.2832, wiki_title: Vườn_quốc_gia_Phong_Nha_–_Kẻ_Bàng, trends_keyword: Phong Nha, aliases: [Phong Nha, Kẻ Bàng]}
+  - {id: son-doong, name: Hang Sơn Đoòng, province: quang-tri, lat: 17.4560, lon: 106.2860, wiki_title: Hang_Sơn_Đoòng, trends_keyword: Sơn Đoòng, aliases: [Sơn Đoòng, Son Doong]}
+  # --- Huế, Đà Nẵng
+  - {id: dai-noi-hue, name: Đại Nội Huế, province: hue, lat: 16.4698, lon: 107.5786, wiki_title: Hoàng_thành_Huế, trends_keyword: Đại Nội Huế, aliases: [Đại Nội, Hoàng thành Huế, Cố đô Huế, Kinh thành Huế]}
+  - {id: ba-na, name: Bà Nà Hills, province: da-nang, lat: 15.9976, lon: 107.9886, wiki_title: Bà_Nà, trends_keyword: Bà Nà Hills, aliases: [Bà Nà, Ba Na Hills, Cầu Vàng]}
+  - {id: son-tra, name: Bán đảo Sơn Trà, province: da-nang, lat: 16.1180, lon: 108.2750, wiki_title: Sơn_Trà, trends_keyword: bán đảo Sơn Trà, aliases: [Sơn Trà, Son Tra]}
+  - {id: ngu-hanh-son, name: Ngũ Hành Sơn, province: da-nang, lat: 16.0040, lon: 108.2630, wiki_title: Ngũ_Hành_Sơn, trends_keyword: Ngũ Hành Sơn, aliases: [Ngũ Hành Sơn, Ngu Hanh Son]}
+  - {id: hoi-an, name: Phố cổ Hội An, province: da-nang, lat: 15.8801, lon: 108.3380, wiki_title: Phố_cổ_Hội_An, trends_keyword: phố cổ Hội An, aliases: [Hội An, Hoi An]}
+  - {id: my-son, name: Thánh địa Mỹ Sơn, province: da-nang, lat: 15.7640, lon: 108.1230, wiki_title: Thánh_địa_Mỹ_Sơn, trends_keyword: Mỹ Sơn, aliases: [Mỹ Sơn, My Son]}
+  - {id: cu-lao-cham, name: Cù Lao Chàm, province: da-nang, lat: 15.9540, lon: 108.5120, wiki_title: Cù_lao_Chàm, trends_keyword: Cù Lao Chàm, aliases: [Cù Lao Chàm, Cu Lao Cham]}
+  # --- Quảng Ngãi, Gia Lai, Đắk Lắk
+  - {id: ly-son, name: Đảo Lý Sơn, province: quang-ngai, lat: 15.3849, lon: 109.1161, wiki_title: Lý_Sơn, trends_keyword: đảo Lý Sơn, aliases: [Lý Sơn, Ly Son]}
+  # Lưu ý: Kỳ Co và vịnh Nha Trang không có bài Wikipedia tiếng Việt đủ lượt xem, nên wiki_title là bài của thành phố làm đại diện
+  # (lượt xem phản ánh mức quan tâm tới cả điểm đến, không riêng bãi biển). Tin tức vẫn khớp theo alias của điểm cụ thể.
+  - {id: ky-co, name: Kỳ Co - Eo Gió (Quy Nhơn), province: gia-lai, lat: 13.7610, lon: 109.2870, wiki_title: Quy_Nhơn_(thành_phố), image_title: Bãi_Kỳ_Co, trends_keyword: Kỳ Co Eo Gió, aliases: [Kỳ Co, Eo Gió, Ky Co]}
+  - {id: ganh-da-dia, name: Gành Đá Đĩa, province: dak-lak, lat: 13.3490, lon: 109.2830, wiki_title: Gành_Đá_Đĩa, trends_keyword: Gành Đá Đĩa, aliases: [Gành Đá Đĩa, Ganh Da Dia]}
+  # --- Khánh Hòa, Lâm Đồng
+  - {id: vinh-nha-trang, name: Biển Nha Trang, province: khanh-hoa, lat: 12.2100, lon: 109.2400, wiki_title: Nha_Trang_(thành_phố), image_title: Vịnh_Nha_Trang, trends_keyword: Vịnh Nha Trang, aliases: [Nha Trang, Vịnh Nha Trang, Hòn Mun]}
+  - {id: thap-ba-ponagar, name: Tháp Bà Ponagar, province: khanh-hoa, lat: 12.2650, lon: 109.1960, wiki_title: Tháp_Po_Nagar, trends_keyword: Tháp Bà Ponagar, aliases: [Ponagar, Tháp Bà]}
+  - {id: ho-xuan-huong, name: Hồ Xuân Hương Đà Lạt, province: lam-dong, lat: 11.9420, lon: 108.4420, wiki_title: Hồ_Xuân_Hương, image_title: Đà_Lạt, trends_keyword: hồ Xuân Hương, aliases: [Hồ Xuân Hương, Đà Lạt, Da Lat, Dalat]}
+  - {id: langbiang, name: Núi Langbiang, province: lam-dong, lat: 12.0430, lon: 108.4400, wiki_title: Núi_Langbiang, trends_keyword: Langbiang, aliases: [Langbiang, Lang Biang, Lâm Viên]}
+  - {id: mui-ne, name: Mũi Né, province: lam-dong, lat: 10.9333, lon: 108.2833, wiki_title: Mũi_Né, trends_keyword: Mũi Né, aliases: [Mũi Né, Mui Ne, Đồi cát bay]}
+  # --- TP. Hồ Chí Minh
+  - {id: dinh-doc-lap, name: Dinh Độc Lập, province: tp-hcm, lat: 10.7770, lon: 106.6955, wiki_title: Dinh_Độc_Lập, trends_keyword: Dinh Độc Lập, aliases: [Dinh Độc Lập, Dinh Thống Nhất]}
+  - {id: nha-tho-duc-ba, name: Nhà thờ Đức Bà, province: tp-hcm, lat: 10.7798, lon: 106.6990, wiki_title: Nhà_thờ_chính_tòa_Đức_Bà_Sài_Gòn, trends_keyword: Nhà thờ Đức Bà, aliases: [Nhà thờ Đức Bà, Đức Bà Sài Gòn]}
+  - {id: cho-ben-thanh, name: Chợ Bến Thành, province: tp-hcm, lat: 10.7725, lon: 106.6980, wiki_title: Chợ_Bến_Thành, trends_keyword: chợ Bến Thành, aliases: [Bến Thành, Ben Thanh]}
+  - {id: dia-dao-cu-chi, name: Địa đạo Củ Chi, province: tp-hcm, lat: 11.1430, lon: 106.4620, wiki_title: Địa_đạo_Củ_Chi, trends_keyword: địa đạo Củ Chi, aliases: [Địa đạo Củ Chi, Củ Chi, Cu Chi]}
+  - {id: can-gio, name: Rừng ngập mặn Cần Giờ, province: tp-hcm, lat: 10.4000, lon: 106.9000, wiki_title: Khu_dự_trữ_sinh_quyển_rừng_ngập_mặn_Cần_Giờ, trends_keyword: Cần Giờ, aliases: [Cần Giờ, Can Gio]}
+  - {id: con-dao, name: Côn Đảo, province: tp-hcm, lat: 8.6833, lon: 106.6000, wiki_title: Côn_Đảo, trends_keyword: Côn Đảo, aliases: [Côn Đảo, Con Dao]}
+  - {id: tuong-chua-kito, name: Tượng Chúa Kitô Vũng Tàu, province: tp-hcm, lat: 10.3260, lon: 107.0870, wiki_title: Tượng_Chúa_Kitô_Vua_(Vũng_Tàu), trends_keyword: tượng Chúa Kitô Vũng Tàu, aliases: [Tượng Chúa Kitô, Vũng Tàu, Vung Tau]}
+  # --- An Giang, Cần Thơ, Cà Mau
+  - {id: phu-quoc, name: Đảo Phú Quốc, province: an-giang, lat: 10.2899, lon: 103.9840, wiki_title: Phú_Quốc, trends_keyword: Phú Quốc, aliases: [Phú Quốc, Phu Quoc]}
+  - {id: nui-sam, name: Núi Sam - Miếu Bà Chúa Xứ, province: an-giang, lat: 10.6770, lon: 105.0800, wiki_title: Miếu_Bà_Chúa_Xứ_Núi_Sam, trends_keyword: Núi Sam Châu Đốc, aliases: [Núi Sam, Bà Chúa Xứ, Châu Đốc]}
+  - {id: tra-su, name: Rừng tràm Trà Sư, province: an-giang, lat: 10.5500, lon: 105.0600, wiki_title: Rừng_tràm_Trà_Sư, trends_keyword: rừng tràm Trà Sư, aliases: [Trà Sư, Tra Su]}
+  - {id: cho-noi-cai-rang, name: Chợ nổi Cái Răng, province: can-tho, lat: 10.0000, lon: 105.7500, wiki_title: Chợ_nổi_Cái_Răng, trends_keyword: chợ nổi Cái Răng, aliases: [Cái Răng, Chợ nổi Cái Răng]}
+  - {id: mui-ca-mau, name: Mũi Cà Mau, province: ca-mau, lat: 8.6100, lon: 104.7200, wiki_title: Mũi_Cà_Mau, trends_keyword: Mũi Cà Mau, aliases: [Mũi Cà Mau, Đất Mũi]}

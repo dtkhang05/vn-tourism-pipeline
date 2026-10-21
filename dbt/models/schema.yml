@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: stg_places
+    columns:
+      - name: place_id
+        tests: [not_null, unique]
+      - name: province_id
+        tests: [not_null]
+      - name: region
+        tests:
+          - accepted_values:
+              values: ["Miền Bắc", "Miền Trung", "Miền Nam"]
+
+  - name: stg_news_mentions
+    columns:
+      - name: article_url
+        tests: [not_null]
+      - name: place_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_places')
+              field: place_id
+
+  - name: fct_place_daily_signals
+    description: Một dòng cho mỗi địa điểm và ngày; hợp nhất các tín hiệu tin tức, Wikipedia, Trends, thời tiết.
+    columns:
+      - name: place_id
+        tests: [not_null]
+      - name: date
+        tests: [not_null]
+      - name: news_count
+        tests:
+          - not_null
+      - name: wiki_views
+        tests:
+          - assert_non_negative
+
+  - name: fct_hot_score
+    columns:
+      - name: hot_score
+        tests: [not_null]
+      - name: n_signals
+        tests: [not_null]
+
+  - name: mart_hot_places_latest
+    description: Một dòng cho mỗi điểm tham quan; hot_rank chỉ có ở điểm đã có tín hiệu (has_signal).
+    columns:
+      - name: place_id
+        tests: [not_null, unique]
+      - name: has_signal
+        tests: [not_null]
+
+  - name: mart_hot_provinces_latest
+    columns:
+      - name: province_id
+        tests: [not_null, unique]

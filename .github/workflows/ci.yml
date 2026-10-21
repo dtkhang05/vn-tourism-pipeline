@@ -1,0 +1,26 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: {POSTGRES_USER: tourism, POSTGRES_PASSWORD: tourism, POSTGRES_DB: tourism}
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U tourism" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -r requirements-dev.txt dbt-postgres==1.9.0
+      - run: ruff check src tests dags app
+      - run: pytest -q
+      - name: Khởi tạo schema và chạy dbt trên Postgres rỗng
+        env: {PGHOST: localhost, PGUSER: tourism, PGPASSWORD: tourism, PGDATABASE: tourism}
+        run: |
+          psql -U tourism -d tourism -f sql/init/02_raw_schema.sql
+          dbt run  --project-dir dbt --profiles-dir dbt
+          dbt test --project-dir dbt --profiles-dir dbt

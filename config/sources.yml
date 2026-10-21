@@ -1,0 +1,5 @@
+news_feeds:
+  - {source: vnexpress, url: "https://vnexpress.net/rss/du-lich.rss"}
+  - {source: tuoitre, url: "https://tuoitre.vn/rss/du-lich.rss"}
+  - {source: dantri, url: "https://dantri.com.vn/rss/du-lich.rss"}
+  - {source: thanhnien, url: "https://thanhnien.vn/rss/du-lich.rss"}

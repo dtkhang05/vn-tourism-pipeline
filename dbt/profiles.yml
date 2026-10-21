@@ -1,0 +1,12 @@
+tourism:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('PGHOST', 'localhost') }}"
+      port: "{{ env_var('PGPORT', '5432') | as_number }}"
+      user: "{{ env_var('PGUSER', 'tourism') }}"
+      password: "{{ env_var('PGPASSWORD', 'tourism') }}"
+      dbname: "{{ env_var('PGDATABASE', 'tourism') }}"
+      schema: public
+      threads: 4

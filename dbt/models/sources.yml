@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: provinces
+      - name: places
+      - name: news_articles
+        loaded_at_field: fetched_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 48, period: hour}
+      - name: news_place_mentions
+      - name: wiki_pageviews
+        loaded_at_field: fetched_at
+        freshness:
+          warn_after: {count: 36, period: hour}
+      - name: news_volume
+      - name: place_wiki_titles
+      - name: trends_interest
+      - name: weather_daily

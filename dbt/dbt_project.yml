@@ -1,0 +1,37 @@
+name: tourism
+version: "0.1.0"
+config-version: 2
+profile: tourism
+
+model-paths: ["models"]
+
+models:
+  tourism:
+    staging:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts
+
+# Keep comments in this file ASCII: dbt reads it with the Windows default codepage.
+vars:
+  # hot score = plain mean of up to four percentile ranks, equal weights (see macros/hot_score.sql)
+  # pseudo-views added to both sides of the year-over-year ratio, so small baselines cannot spike on noise
+  yoy_prior_views: 30
+  # a year-over-year ratio beyond this factor (up or down) is treated as a renamed or split article and ignored
+  yoy_max_ratio: 8
+  # international views per day (this year + last year) needed before the international signal counts
+  min_intl_views: 10
+  # days of baseline history needed before change_pct (display only) is computed
+  min_baseline_days: 14
+  # same for the monthly window (30 days vs the 30 days before it)
+  min_baseline_days_month: 20
+  # a place must be above this attention percentile and have this many signals to be ranked
+  min_attention_pct: 0.25
+  min_day_coverage: 0.9   # ngay moi nhat chi duoc lam moc khi >= 90% diem da co luot xem
+  min_signals: 3
+  # pseudo-articles added to both sides of the news growth ratio
+  news_prior_articles: 2
+  # a province score is shrunk toward the national average as if it had this many extra average places
+  province_prior_places: 2
