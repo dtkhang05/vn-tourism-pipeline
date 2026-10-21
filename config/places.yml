@@ -94,3 +94,16 @@ places:
   - {id: tra-su, name: Rừng tràm Trà Sư, province: an-giang, lat: 10.5500, lon: 105.0600, wiki_title: Rừng_tràm_Trà_Sư, trends_keyword: rừng tràm Trà Sư, aliases: [Trà Sư, Tra Su]}
   - {id: cho-noi-cai-rang, name: Chợ nổi Cái Răng, province: can-tho, lat: 10.0000, lon: 105.7500, wiki_title: Chợ_nổi_Cái_Răng, trends_keyword: chợ nổi Cái Răng, aliases: [Cái Răng, Chợ nổi Cái Răng]}
   - {id: mui-ca-mau, name: Mũi Cà Mau, province: ca-mau, lat: 8.6100, lon: 104.7200, wiki_title: Mũi_Cà_Mau, trends_keyword: Mũi Cà Mau, aliases: [Mũi Cà Mau, Đất Mũi]}
+  # --- Bổ sung đợt 2
+  - {id: ho-tay, name: Hồ Tây, province: ha-noi, lat: 21.0583, lon: 105.8228, wiki_title: Hồ_Tây, trends_keyword: Hồ Tây, aliases: [Hồ Tây, Tây Hồ, West Lake Hanoi]}
+  - {id: hoang-thanh-thang-long, name: Hoàng thành Thăng Long, province: ha-noi, lat: 21.0346, lon: 105.8400, wiki_title: Hoàng_thành_Thăng_Long, trends_keyword: Hoàng thành Thăng Long, aliases: [Hoàng thành Thăng Long, Thăng Long Imperial Citadel]}
+  - {id: nha-hat-lon-ha-noi, name: Nhà hát Lớn Hà Nội, province: ha-noi, lat: 21.0242, lon: 105.8571, wiki_title: Nhà_hát_Lớn_Hà_Nội, trends_keyword: Nhà hát Lớn Hà Nội, aliases: [Nhà hát Lớn Hà Nội, Hanoi Opera House]}
+  - {id: chua-thien-mu, name: Chùa Thiên Mụ, province: hue, lat: 16.4537, lon: 107.5447, wiki_title: Chùa_Thiên_Mụ, trends_keyword: chùa Thiên Mụ, aliases: [Chùa Thiên Mụ, Thiên Mụ, Thien Mu]}
+  - {id: cau-rong, name: Cầu Rồng Đà Nẵng, province: da-nang, lat: 16.0614, lon: 108.2278, wiki_title: Cầu_Rồng, trends_keyword: Cầu Rồng Đà Nẵng, aliases: [Cầu Rồng, Dragon Bridge Da Nang]}
+  - {id: buu-dien-sai-gon, name: Bưu điện Trung tâm Sài Gòn, province: tp-hcm, lat: 10.7799, lon: 106.6999, wiki_title: Bưu_điện_Sài_Gòn, trends_keyword: Bưu điện Thành phố, aliases: [Bưu điện Trung tâm Sài Gòn, Bưu điện Thành phố, Saigon Central Post Office]}
+  - {id: landmark-81, name: Landmark 81, province: tp-hcm, lat: 10.7951, lon: 106.7218, wiki_title: Landmark_81, trends_keyword: Landmark 81, aliases: [Landmark 81]}
+  - {id: thanh-co-quang-tri, name: Thành cổ Quảng Trị, province: quang-tri, lat: 16.7496, lon: 107.1948, wiki_title: Thành_cổ_Quảng_Trị, trends_keyword: Thành cổ Quảng Trị, aliases: [Thành cổ Quảng Trị, Quang Tri Citadel]}
+  - {id: chua-mot-cot, name: Chùa Một Cột, province: ha-noi, lat: 21.0359, lon: 105.8335, wiki_title: Chùa_Một_Cột, trends_keyword: chùa Một Cột, aliases: [Chùa Một Cột, One Pillar Pagoda]}
+  - {id: nha-tu-hoa-lo, name: Nhà tù Hỏa Lò, province: ha-noi, lat: 21.0258, lon: 105.8467, wiki_title: Nhà_tù_Hỏa_Lò, trends_keyword: nhà tù Hỏa Lò, aliases: [Nhà tù Hỏa Lò, Hỏa Lò, Hoa Lo Prison]}
+  - {id: lang-khai-dinh, name: Lăng Khải Định, province: hue, lat: 16.3992, lon: 107.5898, wiki_title: Lăng_Khải_Định, trends_keyword: lăng Khải Định, aliases: [Lăng Khải Định, Khai Dinh Tomb]}
+  - {id: bao-tang-chung-tich, name: Bảo tàng Chứng tích Chiến tranh, province: tp-hcm, lat: 10.7794, lon: 106.6920, wiki_title: Bảo_tàng_Chứng_tích_chiến_tranh, trends_keyword: Bảo tàng Chứng tích Chiến tranh, aliases: [Bảo tàng Chứng tích Chiến tranh, War Remnants Museum]}

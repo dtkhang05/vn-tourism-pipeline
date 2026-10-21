@@ -27,6 +27,20 @@
   "license": "Public domain",
   "artist": "Kien1980v (thảo luận) 01:40, ngày 3 tháng 9 năm 2017 (UTC)"
  },
+ "bao-tang-chung-tich": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/War_Remnants_Museum_%2845291060154%29.jpg/960px-War_Remnants_Museum_%2845291060154%29.jpg",
+  "file": "War Remnants Museum (45291060154).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:War_Remnants_Museum_(45291060154).jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "Isabell Schulz"
+ },
+ "buu-dien-sai-gon": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/Saigon_Central_Post_Office_2022.jpg/960px-Saigon_Central_Post_Office_2022.jpg",
+  "file": "Saigon Central Post Office 2022.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Saigon_Central_Post_Office_2022.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Yesvn123"
+ },
  "can-gio": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Lo_ren_river.jpg/960px-Lo_ren_river.jpg",
   "file": "Lo_ren_river.jpg",
@@ -40,6 +54,13 @@
   "page": "https://vi.wikipedia.org/wiki/Quần_đảo_Cát_Bà",
   "license": "Public domain",
   "artist": "Viethavvh"
+ },
+ "cau-rong": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Dragon_Bridge_Da_Nang_3.jpg/960px-Dragon_Bridge_Da_Nang_3.jpg",
+  "file": "Dragon Bridge Da Nang 3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Dragon_Bridge_Da_Nang_3.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Christophe95"
  },
  "cho-ben-thanh": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Cho_Ben_Thanh%2C_phuong_ben_thanh_quan_1%2C_ho_chi_minhVi%E1%BB%87t_Nam_-_panoramio.jpg/960px-Cho_Ben_Thanh%2C_phuong_ben_thanh_quan_1%2C_ho_chi_minhVi%E1%BB%87t_Nam_-_panoramio.jpg",
@@ -61,6 +82,20 @@
   "page": "https://commons.wikimedia.org/wiki/File:Heavenly_Kitchen_Pagoda,_northern_Vietnam_(3)_(38462243786).jpg",
   "license": "CC BY 2.0",
   "artist": "Richard Mortel from Riyadh, Saudi Arabia"
+ },
+ "chua-mot-cot": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/One_Pillar_Pagoda_in_Hanoi%2C_Vietnam_%2825708058514%29.jpg/960px-One_Pillar_Pagoda_in_Hanoi%2C_Vietnam_%2825708058514%29.jpg",
+  "file": "One Pillar Pagoda in Hanoi, Vietnam (25708058514).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:One_Pillar_Pagoda_in_Hanoi,_Vietnam_(25708058514).jpg",
+  "license": "CC BY 2.0",
+  "artist": "katiebordner"
+ },
+ "chua-thien-mu": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Ch%C3%B9a_Thi%C3%AAn_M%E1%BB%A5_-_Hu%E1%BA%BF_%282024%29_-_img_09.jpg/960px-Ch%C3%B9a_Thi%C3%AAn_M%E1%BB%A5_-_Hu%E1%BA%BF_%282024%29_-_img_09.jpg",
+  "file": "Chùa Thiên Mụ - Huế (2024) - img 09.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ch%C3%B9a_Thi%C3%AAn_M%E1%BB%A5_-_Hu%E1%BA%BF_(2024)_-_img_09.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Chainwit."
  },
  "co-to": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/%C3%82u_c%E1%BA%A3ng.jpg/960px-%C3%82u_c%E1%BA%A3ng.jpg",
@@ -139,12 +174,26 @@
   "license": "CC BY-SA 4.0",
   "artist": "Bùi Thụy Đào Nguyên"
  },
+ "ho-tay": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/H%E1%BB%93_T%C3%A2y_ho%C3%A0ng_h%C3%B4n_-_NKS.jpg/960px-H%E1%BB%93_T%C3%A2y_ho%C3%A0ng_h%C3%B4n_-_NKS.jpg",
+  "file": "Hồ Tây hoàng hôn - NKS.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:H%E1%BB%93_T%C3%A2y_ho%C3%A0ng_h%C3%B4n_-_NKS.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "NKSTTSSHNVN"
+ },
  "ho-xuan-huong": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Da_Lat_-_Viet_Nam.jpg/960px-Da_Lat_-_Viet_Nam.jpg",
   "file": "Da_Lat_-_Viet_Nam.jpg",
   "page": "https://vi.wikipedia.org/wiki/Đà_Lạt",
   "license": "CC BY-SA 4.0",
   "artist": "Tuong Lam Photos"
+ },
+ "hoang-thanh-thang-long": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Central_Sector_of_the_Imperial_Citadel_of_Thang_Long_-_Hanoi.jpg/960px-Central_Sector_of_the_Imperial_Citadel_of_Thang_Long_-_Hanoi.jpg",
+  "file": "Central Sector of the Imperial Citadel of Thang Long - Hanoi.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Central_Sector_of_the_Imperial_Citadel_of_Thang_Long_-_Hanoi.jpg",
+  "license": "CC BY 2.0",
+  "artist": "katiebordner"
  },
  "hoi-an": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Ph%E1%BB%91_c%E1%BB%95_H%E1%BB%99i_An_-_NKS.jpg/960px-Ph%E1%BB%91_c%E1%BB%95_H%E1%BB%99i_An_-_NKS.jpg",
@@ -160,12 +209,26 @@
   "license": "CC BY-SA 4.0",
   "artist": "Lê Hồ Bắc"
  },
+ "landmark-81": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Landmark_81_%2832099609868%29.jpg/960px-Landmark_81_%2832099609868%29.jpg",
+  "file": "Landmark 81 (32099609868).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Landmark_81_(32099609868).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Christine und Hagen Graf"
+ },
  "lang-bac": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-03.jpg/960px-Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-03.jpg",
   "file": "Hanoi Vietnam Mausoleum-of-Ho-Chi-Minh-03.jpg",
   "page": "https://commons.wikimedia.org/wiki/File:Hanoi_Vietnam_Mausoleum-of-Ho-Chi-Minh-03.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "CEphoto, Uwe Aranas"
+ },
+ "lang-khai-dinh": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Khai_Dinh_tomb_Hue_%2827767136409%29.jpg/960px-Khai_Dinh_tomb_Hue_%2827767136409%29.jpg",
+  "file": "Khai Dinh tomb Hue (27767136409).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Khai_Dinh_tomb_Hue_(27767136409).jpg",
+  "license": "CC BY 2.0",
+  "artist": "dronepicr"
  },
  "langbiang": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/%C4%90%E1%BB%89nh_Langbiang.JPG/960px-%C4%90%E1%BB%89nh_Langbiang.JPG",
@@ -223,12 +286,26 @@
   "license": "Public domain",
   "artist": "Viethavvh at vi.wikipedia"
  },
+ "nha-hat-lon-ha-noi": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i_-_2022-09-02_01.jpg/960px-Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i_-_2022-09-02_01.jpg",
+  "file": "Nhà hát Lớn Hà Nội - 2022-09-02 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i_-_2022-09-02_01.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "The Hanoian"
+ },
  "nha-tho-duc-ba": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Bas%C3%ADlica_de_Nuestra_Se%C3%B1ora%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG/960px-Bas%C3%ADlica_de_Nuestra_Se%C3%B1ora%2C_Ciudad_Ho_Chi_Minh%2C_Vietnam%2C_2013-08-14%2C_DD_01.JPG",
   "file": "Basílica de Nuestra Señora, Ciudad Ho Chi Minh, Vietnam, 2013-08-14, DD 01.JPG",
   "page": "https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_de_Nuestra_Se%C3%B1ora,_Ciudad_Ho_Chi_Minh,_Vietnam,_2013-08-14,_DD_01.JPG",
   "license": "CC BY-SA 3.0",
   "artist": "Diego Delso"
+ },
+ "nha-tu-hoa-lo": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Hoa_Lo_Prison_Museum%2C_Hanoi_%282%29_%2824624166618%29.jpg/960px-Hoa_Lo_Prison_Museum%2C_Hanoi_%282%29_%2824624166618%29.jpg",
+  "file": "Hoa Lo Prison Museum, Hanoi (2) (24624166618).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hoa_Lo_Prison_Museum,_Hanoi_(2)_(24624166618).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Richard Mortel from Riyadh, Saudi Arabia"
  },
  "nui-sam": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/Mi%E1%BA%BFu_B%C3%A0_Ch%C3%BAa_X%E1%BB%A9_%2812816644963%29.jpg/960px-Mi%E1%BA%BFu_B%C3%A0_Ch%C3%BAa_X%E1%BB%A9_%2812816644963%29.jpg",
@@ -299,6 +376,13 @@
   "page": "https://vi.wikipedia.org/wiki/Thác_Bản_Giốc",
   "license": "CC BY 2.0",
   "artist": "Lê  Minh Phát"
+ },
+ "thanh-co-quang-tri": {
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1c/Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg/960px-Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg",
+  "file": "Thành cổ Quảng Trị Foto.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Th%C3%A0nh_c%E1%BB%95_Qu%E1%BA%A3ng_Tr%E1%BB%8B_Foto.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Bùi Thụy Đào Nguyên"
  },
  "thap-ba-ponagar": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Th%C3%A1p_B%C3%A0_PONAGAR_-_panoramio.jpg/960px-Th%C3%A1p_B%C3%A0_PONAGAR_-_panoramio.jpg",
