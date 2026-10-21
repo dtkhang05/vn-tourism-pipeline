@@ -19,6 +19,8 @@ API = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/{lang}.wi
 VI_API = "https://vi.wikipedia.org/w/api.php"
 FOREIGN_LANGS = ("en", "ko", "zh", "ja")
 MAX_FAILED_SHARE = 0.02  # quá tỉ lệ bài lỗi này thì cả lần thu thập bị coi là lỗi
+RETRY_ROUNDS = 3  # số vòng gọi lại các bài lỗi sau khi chạy hết danh sách
+RETRY_PAUSE = 90  # giây nghỉ trước mỗi vòng gọi lại
 
 
 def fetch_pageviews(lang: str, title: str, start: date, end: date) -> list[tuple[date, int]]:
@@ -66,15 +68,22 @@ def run(dry_run: bool = False, days: int = 14) -> int:
             upsert(cur, "raw.place_wiki_titles", ["place_id", "lang", "title"], sorted(targets), ["place_id", "lang", "title"])
 
     views: dict[tuple[str, str, date], int] = defaultdict(int)  # cộng lượt xem của các bài cùng điểm, cùng ngôn ngữ
-    failed: list[tuple[str, str, str]] = []
-    for pid, lang, title in sorted(targets):
-        try:
-            for d, v in fetch_pageviews(lang, title, start, end):
-                views[(pid, lang, d)] += v
-        except Exception as exc:  # noqa: BLE001 - một bài lỗi không làm hỏng cả lô
-            log.warning("Bỏ qua %s/%s/%s: %s", pid, lang, title, exc)
-            failed.append((pid, lang, title))
-        time.sleep(0.25)  # lịch sự với API công cộng; nhanh hơn thì bị giới hạn tần suất (429) khi có hơn ~60 điểm
+    pending = sorted(targets)
+    for attempt in range(RETRY_ROUNDS + 1):
+        failed: list[tuple[str, str, str]] = []
+        for pid, lang, title in pending:
+            try:
+                for d, v in fetch_pageviews(lang, title, start, end):
+                    views[(pid, lang, d)] += v
+            except Exception as exc:  # noqa: BLE001 - một bài lỗi không làm hỏng cả lô
+                log.warning("Bỏ qua %s/%s/%s: %s", pid, lang, title, exc)
+                failed.append((pid, lang, title))
+            time.sleep(0.25)  # lịch sự với API công cộng; nhanh hơn thì bị giới hạn tần suất (429) khi có hơn ~60 điểm
+        if not failed or attempt == RETRY_ROUNDS:
+            break
+        log.info("%d bài lỗi, nghỉ %ds rồi thử lại (vòng %d/%d)", len(failed), RETRY_PAUSE, attempt + 1, RETRY_ROUNDS)
+        time.sleep(RETRY_PAUSE)  # 429 đến theo từng đợt, nghỉ lâu thì các bài lỗi thường qua được
+        pending = failed
     rows = [(pid, lang, d, v) for (pid, lang, d), v in views.items()]
     if dry_run:
         print(rows[:3], len(targets), "bài")
