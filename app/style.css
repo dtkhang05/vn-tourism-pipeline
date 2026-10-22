@@ -329,3 +329,5 @@ table.credits-tb a { color: #6FD6F2; }
   .pc .r { bottom: 2.9rem; }
   .pc .pv { bottom: 1.5rem; max-width: calc(100% - 1.9rem); }
 }
+.gc.un .nm { left: .75rem; right: .75rem; }
+.gc.un .ph { filter: saturate(.8); }

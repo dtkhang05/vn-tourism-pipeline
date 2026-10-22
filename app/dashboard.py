@@ -249,6 +249,16 @@ def list_row(r: dict, p: dict) -> str:
     )
 
 
+def unranked_row(r: dict) -> str:
+    """Thẻ lưới cho điểm chưa được xếp hạng: có ảnh, tên, tỉnh và miền, nhưng không có hạng và điểm."""
+    cls, img = photo(r["place_id"], r["region"])
+    return (
+        f'<article class="gc un"><div class="ph {cls}">{img}</div>'
+        f'<b class="nm">{esc(r["name"])}</b><span class="pv">{esc(r["province"])}</span>'
+        f'<div class="r">{region_chip(r["region"])}<span class="tr-wrap">Chưa xếp hạng</span></div></article>'
+    )
+
+
 # --- tỉnh, thành
 def province_poster(r: dict, q: dict) -> str:
     place_id = r[q["top_id"]]
@@ -428,9 +438,18 @@ else:
         st.caption("Số thứ tự là hạng trên cả nước." + (" Chưa lọc thì danh sách bắt đầu từ hạng 6, vì năm điểm đầu đã nằm ở phần trên." if not filtered else ""))
 
     unranked = places[~places[p["has"]]].sort_values("name")
+    if region != "Tất cả":
+        unranked = unranked[unranked["region"] == region]
+    if province != "Tất cả tỉnh thành":
+        unranked = unranked[unranked["province"] == province]
     if not unranked.empty:
-        with st.expander(f"{len(unranked)} điểm chưa được xếp hạng {p['label']} này"):
-            st.markdown("Lượng quan tâm thuộc nhóm thấp nhất hoặc chưa đủ tín hiệu, nên mức tăng giảm chỉ là nhiễu: " + ", ".join(esc(n) for n in unranked["name"]) + ".")
+        st.markdown(
+            f'<h2 class="sec">Chưa xếp hạng {p["label"]} này ({len(unranked)} điểm)</h2>'
+            '<p class="sec-sub">Lượng quan tâm thuộc nhóm thấp nhất hoặc chưa đủ tín hiệu, nên mức tăng giảm chỉ là nhiễu. '
+            "Các điểm này vẫn xem được ở phần so sánh và chi tiết bên dưới.</p>",
+            unsafe_allow_html=True,
+        )
+        st.markdown(f'<div class="grid">{"".join(unranked_row(r) for r in unranked.to_dict("records"))}</div>', unsafe_allow_html=True)
 
 # ------------------------------------------------------------------ bản đồ
 # ------------------------------------------------------------------ so sánh điểm
