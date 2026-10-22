@@ -2,7 +2,7 @@
 
 **Xem dashboard trực tuyến: https://vn-hot-travel.streamlit.app/**
 
-Pipeline dữ liệu near-real-time phát hiện **điểm du lịch đang được quan tâm nhiều ở Việt Nam**: thu thập từ nhiều nguồn độc lập, xử lý, mô hình hóa bằng dbt, điều phối bằng Airflow và hiển thị trên dashboard dạng áp phích có công tắc Tuần/Tháng.
+Pipeline dữ liệu near-real-time phát hiện **điểm du lịch đang được quan tâm nhiều ở Việt Nam**: thu thập từ nhiều nguồn độc lập, xử lý, mô hình hóa bằng dbt, điều phối bằng GitHub Actions (bản trực tuyến) hoặc Airflow (bản cục bộ) và hiển thị trên dashboard dạng áp phích có công tắc Tuần/Tháng.
 
 ![Luồng dữ liệu: bốn nguồn, thu thập bằng Python, Postgres, dbt, dashboard Streamlit; điều phối bằng GitHub Actions hoặc Airflow](docs/pipeline.svg)
 
