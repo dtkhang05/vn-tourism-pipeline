@@ -24,7 +24,7 @@ Cả hai dùng chung mã ingest và dbt. Bản trực tuyến không giữ CSDL 
 
 ## Mô hình dữ liệu hai tầng
 
-Xếp hạng ở mức **điểm tham quan cụ thể** (51 điểm như Hồ Gươm, Fansipan, Bà Nà Hills, Tràng An), mỗi điểm thuộc một **tỉnh/thành** (22 đơn vị, theo 34 đơn vị hành chính từ 7/2025) và một miền. Bảng tỉnh/thành là phép gộp bên trên, không phải đơn vị xếp hạng chính.
+Xếp hạng ở mức **điểm tham quan cụ thể** (63 điểm như Hồ Gươm, Fansipan, Bà Nà Hills, Tràng An), mỗi điểm thuộc một **tỉnh/thành** (22 đơn vị, theo 34 đơn vị hành chính từ 7/2025) và một miền. Bảng tỉnh/thành là phép gộp bên trên, không phải đơn vị xếp hạng chính.
 
 ## Hot score
 
@@ -37,12 +37,12 @@ Xếp hạng ở mức **điểm tham quan cụ thể** (51 điểm như Hồ G�
 | Quốc tế | Như trên, chỉ tính bài tiếng Anh, Hàn, Trung, Nhật | Người đọc các bản này chủ yếu sắp đi du lịch, không bị lịch học và làm việc ở Việt Nam chi phối |
 | Báo chí | Số bài báo nhắc tên (Google News) giai đoạn gần nhất so với 4 tuần trước | Nguồn độc lập với Wikipedia, có lịch sử ngay từ lần chạy đầu |
 
-**Ví dụ với số thật** (số liệu đến 20/10/2026, tuần): Đảo Phú Quốc có ~245 lượt xem tiếng Việt mỗi ngày và ~676 lượt ngoại ngữ, thấp hơn một chút so với cùng kỳ năm trước (-8,6%) nhưng khách quốc tế tăng 5%, 29 bài báo trong tuần. Trong 38 điểm được xếp, nó đứng ở phần trăm thứ 94,6 về quan tâm, 86,5 về cùng kỳ, 76,5 về quốc tế và 94,6 về báo chí. Trung bình bốn số này là **88,0**, hạng 1. Hồ Gươm có lượt xem cao nhất (phần trăm 100) và đứng sau Phú Quốc chỉ vì tín hiệu quốc tế thấp hơn (64,7).
+**Ví dụ với số thật** (số liệu đến 21/10/2026, tuần): Đảo Phú Quốc có ~254 lượt xem tiếng Việt mỗi ngày và ~671 lượt ngoại ngữ, thấp hơn một chút so với cùng kỳ năm trước (-8,9%) nhưng khách quốc tế tăng 5%, 28 bài báo trong tuần. Trong 47 điểm được xếp, nó đứng ở phần trăm thứ 95,7 về quan tâm, 89,1 về cùng kỳ, 83,3 về quốc tế và 91,3 về báo chí. Trung bình bốn số này là **89,9**, hạng 1. Hồ Gươm có lượt xem cao nhất (phần trăm 100) và đứng sau Phú Quốc chỉ vì tín hiệu quốc tế thấp hơn (71,4).
 
 Quy tắc đi kèm (cấu hình ở `dbt/dbt_project.yml`):
 
 - Tín hiệu thiếu là NULL và bị loại khỏi trung bình, không bị tính thành 0.
-- Điểm có lượng quan tâm thuộc 25% thấp nhất, hoặc có dưới 3 trong 4 tín hiệu, **không được xếp hạng** (hiện 38/51 điểm được xếp). Phần trăm tăng trên nền vài chục lượt xem chỉ là nhiễu: đảo Cô Tô (~16 lượt/ngày) từng vào top 10 chỉ vì thế.
+- Điểm có lượng quan tâm thuộc 25% thấp nhất, hoặc có dưới 3 trong 4 tín hiệu, **không được xếp hạng** (hiện 47/63 điểm được xếp). Phần trăm tăng trên nền vài chục lượt xem chỉ là nhiễu: đảo Cô Tô (~16 lượt/ngày) từng vào top 10 chỉ vì thế.
 - Mức tăng hoặc giảm quá 8 lần so với năm trước bị bỏ (`yoy_max_ratio`), vì thường do bài Wikipedia bị đổi tên hoặc tách trang.
 - Điểm tỉnh/thành co về trung bình cả nước (shrinkage): `(tổng điểm + k × TB toàn quốc) / (số điểm + k)`.
 
@@ -154,7 +154,7 @@ Giữ chú thích trong `dbt_project.yml` bằng ASCII: dbt đọc file này the
 
 - **Đo quan tâm, không đo số người đến.** Số khách thật theo địa điểm không được công bố theo ngày. Lượt xem Wikipedia vẫn có thể lẫn lưu lượng tự động; bài báo có thể nhắc một nơi vì lý do ngoài du lịch. Nên xem bảng là gợi ý để tìm hiểu thêm.
 - **Wikipedia giảm lượt xem nói chung** (hầu hết điểm âm so với năm trước), nên cùng kỳ là thước đo tương đối giữa các điểm, không phải mức tăng tuyệt đối.
-- **13/51 điểm chưa được xếp hạng** vì quy mô quá nhỏ; dashboard liệt kê tên các điểm này.
+- **16/63 điểm chưa được xếp hạng** vì quy mô quá nhỏ; dashboard liệt kê tên các điểm này.
 - **Google Trends** dùng `pytrends` (không chính thức), thường bị chặn 429, nên không nằm trong điểm.
 - **Nhận diện địa danh bằng từ điển alias**, chưa dùng NER; tên mơ hồ có thể khớp nhầm.
 - **Tên tỉnh/thành theo 34 đơn vị hành chính từ 7/2025** do người viết tự tổng hợp, chưa đối chiếu nguồn chính thức.
