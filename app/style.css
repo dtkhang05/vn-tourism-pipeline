@@ -331,3 +331,17 @@ table.credits-tb a { color: #6FD6F2; }
 }
 .gc.un .nm { left: .75rem; right: .75rem; }
 .gc.un .ph { filter: saturate(.8); }
+
+table.how-tb { width: 100%; border-collapse: collapse; font-size: .9rem; line-height: 1.55; margin-top: .8rem; table-layout: fixed; }
+table.how-tb th { text-align: left; padding: .45rem .7rem; color: #fff; font-weight: 700; border-bottom: 1px solid var(--glass-line); }
+table.how-tb td { padding: .5rem .7rem; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,.1); color: var(--ink-soft); }
+table.how-tb td:first-child { color: var(--ink); font-weight: 700; }
+table.how-tb th:first-child, table.how-tb td:first-child { width: 18%; }
+table.how-tb th:nth-child(2), table.how-tb td:nth-child(2) { width: 40%; }
+@media (max-width: 800px) {
+  table.how-tb, table.how-tb tbody, table.how-tb tr, table.how-tb td { display: block; width: 100%; }
+  table.how-tb thead { display: none; }
+  table.how-tb tr { padding: .5rem 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+  table.how-tb td { padding: .1rem 0; border: 0; }
+  table.how-tb th:first-child, table.how-tb td:first-child, table.how-tb td:nth-child(2) { width: 100%; }
+}

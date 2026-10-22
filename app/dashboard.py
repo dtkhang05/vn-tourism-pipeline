@@ -563,15 +563,26 @@ st.caption("Chấm càng to điểm càng cao. Xanh dương là miền Bắc, xa
 # ------------------------------------------------------------------ cách tính, lưu ý, bằng chứng, nguồn ảnh
 st.markdown('<h2 class="sec">Điểm được tính thế nào, và nên đọc kết quả ra sao</h2>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="note"><b>Mỗi điểm được so với các điểm còn lại trong cùng ngày ở bốn tín hiệu, rồi lấy trung bình với trọng số bằng nhau.</b><br>'
-    "Quan tâm: lượt xem Wikipedia của điểm đó ở năm ngôn ngữ (Việt, Anh, Hàn, Trung, Nhật), trung bình 7 ngày hoặc 30 ngày gần nhất.<br>"
-    "Cùng kỳ: mức quan tâm so với đúng giai đoạn năm trước (lùi 52 tuần để trùng thứ trong tuần). Nơi chỉ đông vì đang vào mùa không được cộng điểm, "
-    "chỉ phần tăng bất thường mới được tính.<br>"
-    "Quốc tế: như trên nhưng chỉ tính bài tiếng Anh, Hàn, Trung, Nhật. Người đọc các bản này chủ yếu sắp đi du lịch, không bị lịch học và lịch làm việc ở Việt Nam chi phối.<br>"
-    "Báo chí: số bài báo nhắc tên điểm (Google News) trong giai đoạn gần nhất so với bốn tuần trước đó.<br>"
-    "Điều kiện xếp hạng: lượng quan tâm không thuộc nhóm thấp nhất và có ít nhất 3 trong 4 tín hiệu; mức tăng hoặc giảm quá 8 lần so với năm trước bị bỏ vì thường do bài Wikipedia bị đổi tên. "
-    "Xu hướng ngắn hạn không được tính vì bị lịch học nhiễu (ví dụ Hồ Gươm tăng vọt vào ngày thường khi bài &ldquo;Sự tích Hồ Gươm&rdquo; vào chương trình).<br>"
-    "Điểm tỉnh, thành: trung bình điểm các điểm đã được xếp hạng của tỉnh, co về trung bình cả nước (thêm 2 điểm trung bình vào mỗi tỉnh).</div>",
+    '<div class="note"><b>Mỗi điểm được so với các điểm còn lại trong cùng ngày ở bốn tín hiệu, rồi lấy trung bình với trọng số bằng nhau.</b>'
+    '<table class="how-tb"><thead><tr><th>Tín hiệu</th><th>Đo cái gì</th><th>Lưu ý</th></tr></thead><tbody>'
+    "<tr><td>Quan tâm</td><td>Lượt xem Wikipedia của điểm ở năm ngôn ngữ (Việt, Anh, Hàn, Trung, Nhật), trung bình 7 ngày hoặc 30 ngày gần nhất.</td>"
+    "<td>So với các điểm khác trong cùng ngày.</td></tr>"
+    "<tr><td>Cùng kỳ</td><td>Mức quan tâm so với đúng giai đoạn năm trước.</td>"
+    "<td>Lùi 52 tuần để trùng thứ trong tuần. Nơi chỉ đông vì đang vào mùa không được cộng điểm, chỉ phần tăng bất thường mới được tính.</td></tr>"
+    "<tr><td>Quốc tế</td><td>Như trên nhưng chỉ tính bài tiếng Anh, Hàn, Trung, Nhật.</td>"
+    "<td>Người đọc các bản này chủ yếu sắp đi du lịch, không bị lịch học và lịch làm việc ở Việt Nam chi phối.</td></tr>"
+    "<tr><td>Báo chí</td><td>Số bài báo nhắc tên điểm (Google News).</td><td>Giai đoạn gần nhất so với bốn tuần trước đó.</td></tr>"
+    "</tbody></table>"
+    '<table class="how-tb"><thead><tr><th>Quy tắc</th><th>Nội dung</th><th>Lý do</th></tr></thead><tbody>'
+    "<tr><td>Điều kiện xếp hạng</td><td>Lượng quan tâm không thuộc nhóm thấp nhất và có ít nhất 3 trong 4 tín hiệu.</td>"
+    "<td>Phần trăm tăng trên nền vài chục lượt xem chỉ là nhiễu.</td></tr>"
+    "<tr><td>Bỏ mức đổi quá 8 lần</td><td>Mức tăng hoặc giảm quá 8 lần so với năm trước không được tính.</td>"
+    "<td>Thường do bài Wikipedia bị đổi tên.</td></tr>"
+    "<tr><td>Không tính xu hướng ngắn hạn</td><td>Chỉ so với cùng kỳ năm trước, không so với tuần trước.</td>"
+    "<td>Bị lịch học nhiễu, ví dụ Hồ Gươm tăng vọt vào ngày thường khi bài &ldquo;Sự tích Hồ Gươm&rdquo; vào chương trình.</td></tr>"
+    "<tr><td>Điểm tỉnh, thành</td><td>Trung bình điểm các điểm đã được xếp hạng của tỉnh, co về trung bình cả nước.</td>"
+    "<td>Thêm 2 điểm trung bình vào mỗi tỉnh để tỉnh ít điểm không lên cao nhờ may mắn.</td></tr>"
+    "</tbody></table></div>",
     unsafe_allow_html=True,
 )
 st.markdown(
