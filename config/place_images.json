@@ -343,11 +343,11 @@
   "artist": "Phi Phi Hoang"
  },
  "sam-son": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Sam_Son_beach.jpg/960px-Sam_Son_beach.jpg",
-  "file": "Sam_Son_beach.jpg",
-  "page": "https://vi.wikipedia.org/wiki/Sầm_Sơn_(thành_phố)",
-  "license": "CC BY 2.0",
-  "artist": "Kevin Walsh"
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Bi%E1%BB%83n_S%E1%BA%A7m_S%C6%A1n_20160903.jpg/960px-Bi%E1%BB%83n_S%E1%BA%A7m_S%C6%A1n_20160903.jpg",
+  "file": "Biển Sầm Sơn 20160903.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Bi%E1%BB%83n_S%E1%BA%A7m_S%C6%A1n_20160903.jpg",
+  "license": "Public domain",
+  "artist": "Chồn"
  },
  "son-doong": {
   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Son_Doong_Cave_by_Daniel_Burka.jpg/960px-Son_Doong_Cave_by_Daniel_Burka.jpg",
@@ -392,9 +392,9 @@
   "artist": "Makarenko Sasha"
  },
  "tra-su": {
-  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Tr%C3%A0_S%C6%B0_1.jpg/960px-Tr%C3%A0_S%C6%B0_1.jpg",
-  "file": "Trà_Sư_1.jpg",
-  "page": "https://vi.wikipedia.org/wiki/Rừng_tràm_Trà_Sư",
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Tr%C3%A0_S%C6%B0_2.jpg/960px-Tr%C3%A0_S%C6%B0_2.jpg",
+  "file": "Trà Sư 2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tr%C3%A0_S%C6%B0_2.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Bùi Thụy Đào Nguyên"
  },
