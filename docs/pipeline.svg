@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 560" role="img" aria-labelledby="t d" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title id="t">Luồng dữ liệu của VN Tourism Pipeline</title>
+  <desc id="d">Bốn nguồn dữ liệu đi qua bước thu thập bằng Python vào Postgres (raw), dbt biến thành bảng điểm nóng (marts), rồi hiển thị trên dashboard Streamlit. Bản trực tuyến chạy bằng GitHub Actions, bản cục bộ chạy bằng Airflow.</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4A5F7D"/></marker>
+    <style>
+      .src{fill:#EAF2FF;stroke:#9DB8E0}
+      .stg{fill:#FFFFFF;stroke:#4A5F7D;stroke-width:1.6}
+      .out{fill:#1F6FD1;stroke:#1F6FD1}
+      .h{font-size:15px;font-weight:700;fill:#14233A}
+      .s{font-size:12.5px;fill:#4A5F7D}
+      .w{fill:#FFFFFF}
+      .ln{stroke:#4A5F7D;stroke-width:1.8;fill:none}
+      .lb{font-size:12px;fill:#4A5F7D;text-anchor:middle}
+    </style>
+  </defs>
+  <rect width="1100" height="560" rx="14" fill="#F6F8FB"/>
+
+  <text x="24" y="34" class="h" font-size="13" fill="#4A5F7D" style="font-size:13px;fill:#4A5F7D;font-weight:600">NGUỒN DỮ LIỆU</text>
+
+  <!-- nguồn -->
+  <rect class="src" x="24" y="50" width="290" height="64" rx="10"/>
+  <text x="40" y="76" class="h">Wikipedia Pageviews</text>
+  <text x="40" y="97" class="s">5 ngôn ngữ: vi, en, ko, zh, ja · 460 ngày</text>
+
+  <rect class="src" x="24" y="126" width="290" height="64" rx="10"/>
+  <text x="40" y="152" class="h">Google News RSS</text>
+  <text x="40" y="173" class="s">Số bài nhắc tên điểm theo tuần · 8 tuần</text>
+
+  <rect class="src" x="24" y="202" width="290" height="64" rx="10"/>
+  <text x="40" y="228" class="h">RSS báo điện tử</text>
+  <text x="40" y="249" class="s">VnExpress, Tuổi Trẻ, Dân Trí, Thanh Niên</text>
+
+  <rect class="src" x="24" y="278" width="290" height="64" rx="10"/>
+  <text x="40" y="304" class="h">Open-Meteo</text>
+  <text x="40" y="325" class="s">Thời tiết và lượng mưa 3 ngày tới</text>
+
+  <rect class="src" x="24" y="354" width="290" height="46" rx="10" stroke-dasharray="5 4" style="fill:#F6F8FB"/>
+  <text x="40" y="382" class="s">Google Trends (tùy chọn, hay bị chặn)</text>
+
+  <!-- mũi tên vào ingest -->
+  <path class="ln" d="M314 82 H350 V225"/>
+  <path class="ln" d="M314 158 H350"/>
+  <path class="ln" d="M314 234 H350"/>
+  <path class="ln" d="M314 310 H350 V225"/>
+  <path class="ln" d="M314 377 H350 V225" stroke-dasharray="5 4"/>
+  <path class="ln" d="M350 225 H384" marker-end="url(#ar)"/>
+
+  <!-- ingest -->
+  <rect class="stg" x="386" y="170" width="140" height="110" rx="12"/>
+  <text x="456" y="212" class="h" text-anchor="middle">Python</text>
+  <text x="456" y="232" class="h" text-anchor="middle">ingest</text>
+  <text x="456" y="256" class="s" text-anchor="middle">gọi lại khi bị 429</text>
+
+  <path class="ln" d="M526 225 H574" marker-end="url(#ar)"/>
+  <text x="550" y="215" class="lb">upsert</text>
+
+  <!-- postgres -->
+  <rect class="stg" x="576" y="170" width="130" height="110" rx="12"/>
+  <text x="641" y="212" class="h" text-anchor="middle">Postgres</text>
+  <text x="641" y="236" class="s" text-anchor="middle">raw.*</text>
+  <text x="641" y="256" class="s" text-anchor="middle">dữ liệu thô</text>
+
+  <path class="ln" d="M706 225 H754" marker-end="url(#ar)"/>
+  <text x="730" y="215" class="lb">dbt</text>
+
+  <!-- marts -->
+  <rect class="stg" x="756" y="170" width="150" height="110" rx="12"/>
+  <text x="831" y="212" class="h" text-anchor="middle">marts.*</text>
+  <text x="831" y="236" class="s" text-anchor="middle">hot score</text>
+  <text x="831" y="256" class="s" text-anchor="middle">tuần và tháng</text>
+
+  <path class="ln" d="M906 225 H944" marker-end="url(#ar)"/>
+
+  <!-- dashboard -->
+  <rect class="out" x="946" y="170" width="130" height="110" rx="12"/>
+  <text x="1011" y="212" class="h w" text-anchor="middle" style="fill:#fff">Dashboard</text>
+  <text x="1011" y="236" class="s" text-anchor="middle" style="fill:#DCE8FA">Streamlit</text>
+  <text x="1011" y="256" class="s" text-anchor="middle" style="fill:#DCE8FA">xếp hạng, so sánh</text>
+
+  <!-- điều phối -->
+  <text x="386" y="446" class="h" font-size="13" style="font-size:13px;fill:#4A5F7D;font-weight:600">ĐIỀU PHỐI</text>
+
+  <rect x="386" y="458" width="690" height="42" rx="10" fill="#E6F4EF" stroke="#8CC9B5"/>
+  <text x="402" y="476" class="h" style="font-size:13.5px">Bản trực tuyến</text>
+  <text x="402" y="493" class="s">GitHub Actions mỗi ngày lúc 09:00 (giờ VN): thu thập, dbt run và test, xuất snapshot, commit, Streamlit Cloud nạp lại</text>
+
+  <rect x="386" y="508" width="690" height="42" rx="10" fill="#EFEAFB" stroke="#B9A9E6"/>
+  <text x="402" y="526" class="h" style="font-size:13.5px">Bản cục bộ (Docker)</text>
+  <text x="402" y="543" class="s">Airflow mỗi 3 giờ: ingest song song, trích địa danh, dbt run, dbt test; dashboard đọc thẳng Postgres</text>
+</svg>

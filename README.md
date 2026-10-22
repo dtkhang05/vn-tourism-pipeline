@@ -4,14 +4,7 @@
 
 Pipeline dữ liệu near-real-time phát hiện **điểm du lịch đang được quan tâm nhiều ở Việt Nam**: thu thập từ nhiều nguồn độc lập, xử lý, mô hình hóa bằng dbt, điều phối bằng Airflow và hiển thị trên dashboard dạng áp phích có công tắc Tuần/Tháng.
 
-```
-Wikipedia Pageviews (vi, en, ko, zh, ja; 460 ngày) ─┐
-Google News RSS (số bài theo tuần, 8 tuần) ─────────┤  Python ingest   ┌────────────┐   dbt    ┌──────────────┐
-RSS báo (VnExpress, Tuổi Trẻ, Dân Trí, Thanh Niên) ─┼──(upsert)──────▶ │ Postgres   │ ───────▶ │ marts.*      │ ──▶ Streamlit
-Open-Meteo (thời tiết) ─────────────────────────────┤                  │ raw.*      │          │ hot score    │
-Google Trends (tùy chọn, thường bị chặn) ───────────┘                  └────────────┘          └──────────────┘
-                              Airflow: chạy mỗi 3 giờ, ingest song song → trích địa danh → dbt run → dbt test
-```
+![Luồng dữ liệu: bốn nguồn, thu thập bằng Python, Postgres, dbt, dashboard Streamlit; điều phối bằng GitHub Actions hoặc Airflow](docs/pipeline.svg)
 
 ## Hai cách chạy
 
