@@ -50,7 +50,11 @@ jobs:
       - name: dbt run và test
         run: |
           dbt run  --project-dir dbt --profiles-dir dbt
-          dbt test --project-dir dbt --profiles-dir dbt
+          dbt test --project-dir dbt --profiles-dir dbt || {
+            echo "--- Dòng vi phạm của test ---"
+            dbt show --project-dir dbt --profiles-dir dbt --limit 20 --inline ""$(cat dbt/tests/hot_score_single_day_spike_cannot_win.sql)" || true
+            exit 1
+          }
       - name: Xuất snapshot
         run: python scripts/export_snapshot.py
       - name: Commit nếu dữ liệu đổi
