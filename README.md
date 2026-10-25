@@ -2,7 +2,7 @@
 
 **Xem dashboard trực tuyến: https://vn-hot-travel.streamlit.app/**
 
-[![Video giới thiệu dự án, 80 giây, có thuyết minh tiếng Việt](docs/gioi-thieu-poster.jpg)](https://github.com/dtkhang05/vn-tourism-pipeline/raw/main/docs/gioi-thieu.mp4)
+[![Video giới thiệu dự án, 80 giây, có thuyết minh tiếng Việt](docs/gioi-thieu-poster.jpg)](https://cdn.jsdelivr.net/gh/dtkhang05/vn-tourism-pipeline@main/docs/gioi-thieu.mp4)
 
 Pipeline dữ liệu near-real-time phát hiện **điểm du lịch đang được quan tâm nhiều ở Việt Nam**: thu thập từ nhiều nguồn độc lập, xử lý, mô hình hóa bằng dbt, điều phối bằng GitHub Actions (bản trực tuyến) hoặc Airflow (bản cục bộ) và hiển thị trên dashboard dạng áp phích có công tắc Tuần/Tháng.
 
